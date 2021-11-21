@@ -28,8 +28,8 @@ Window_SkillStatus.prototype.refresh = function() {
         var w = this.width - this.padding * 2;
         var h = this.height - this.padding * 2;
         var y = h / 2 - this.lineHeight() * 1.5;
-        var width = w - 162 - this.textPadding();
-        this.drawActorFace(this._actor, 0, 0, 144, h);
-        this.drawActorSimpleStatus(this._actor, 162, y, width);
+        var width = w - 104 - this.textPadding();
+        this.drawActorFace(this._actor, 0, 0, 96, h);
+        this.drawActorSimpleStatus(this._actor, 104, y, width);
     }
 };

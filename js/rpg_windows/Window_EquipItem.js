@@ -36,7 +36,7 @@ Window_EquipItem.prototype.includes = function(item) {
     if (item === null) {
         return true;
     }
-    if (this._slotId < 0 || item.etypeId !== this._actor.equipSlots()[this._slotId]) {
+    if (this._slotId < 0 || item.etype_id !== this._actor.equipSlots()[this._slotId]) {
         return false;
     }
     return this._actor.canEquip(item);

@@ -47,7 +47,7 @@ Window_EventItem.prototype.updatePlacement = function() {
 
 Window_EventItem.prototype.includes = function(item) {
     var itypeId = $gameMessage.itemChoiceItypeId();
-    return DataManager.isItem(item) && item.itypeId === itypeId;
+    return DataManager.isItem(item) && item.itype_id === itypeId;
 };
 
 Window_EventItem.prototype.isEnabled = function(item) {

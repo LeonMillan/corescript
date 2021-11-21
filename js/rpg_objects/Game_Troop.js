@@ -59,8 +59,8 @@ Game_Troop.prototype.setup = function(troopId) {
     this._troopId = troopId;
     this._enemies = [];
     this.troop().members.forEach(function(member) {
-        if ($dataEnemies[member.enemyId]) {
-            var enemyId = member.enemyId;
+        if ($dataEnemies[member.enemy_id]) {
+            var enemyId = member.enemy_id;
             var x = member.x;
             var y = member.y;
             var enemy = new Game_Enemy(enemyId, x, y);
@@ -108,20 +108,20 @@ Game_Troop.prototype.enemyNames = function() {
 };
 
 Game_Troop.prototype.meetsConditions = function(page) {
-    var c = page.conditions;
-    if (!c.turnEnding && !c.turnValid && !c.enemyValid &&
-            !c.actorValid && !c.switchValid) {
+    var c = page.condition;
+    if (!c.turn_ending && !c.turn_valid && !c.enemy_valid &&
+            !c.actor_valid && !c.switch_valid) {
         return false;  // Conditions not set
     }
-    if (c.turnEnding) {
+    if (c.turn_ending) {
         if (!BattleManager.isTurnEnd()) {
             return false;
         }
     }
-    if (c.turnValid) {
+    if (c.turn_valid) {
         var n = this._turnCount;
-        var a = c.turnA;
-        var b = c.turnB;
+        var a = c.turn_a;
+        var b = c.turn_b;
         if ((b === 0 && n !== a)) {
             return false;
         }
@@ -129,20 +129,20 @@ Game_Troop.prototype.meetsConditions = function(page) {
             return false;
         }
     }
-    if (c.enemyValid) {
+    if (c.enemy_valid) {
         var enemy = $gameTroop.members()[c.enemyIndex];
-        if (!enemy || enemy.hpRate() * 100 > c.enemyHp) {
+        if (!enemy || enemy.hpRate() * 100 > c.enemy_hp) {
             return false;
         }
     }
-    if (c.actorValid) {
-        var actor = $gameActors.actor(c.actorId);
-        if (!actor || actor.hpRate() * 100 > c.actorHp) {
+    if (c.actor_valid) {
+        var actor = $gameActors.actor(c.actor_id);
+        if (!actor || actor.hpRate() * 100 > c.actor_hp) {
             return false;
         }
     }
-    if (c.switchValid) {
-        if (!$gameSwitches.value(c.switchId)) {
+    if (c.switch_valid) {
+        if (!$gameSwitches.value(c.switch_id)) {
             return false;
         }
     }

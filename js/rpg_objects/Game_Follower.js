@@ -14,7 +14,7 @@ Game_Follower.prototype.constructor = Game_Follower;
 Game_Follower.prototype.initialize = function(memberIndex) {
     Game_Character.prototype.initialize.call(this);
     this._memberIndex = memberIndex;
-    this.setTransparent($dataSystem.optTransparent);
+    this.setTransparent($dataSystem.opt_transparent);
     this.setThrough(true);
 };
 

@@ -22,7 +22,7 @@ Window_MenuCommand.initCommandPosition = function() {
 };
 
 Window_MenuCommand.prototype.windowWidth = function() {
-    return 240;
+    return 160;
 };
 
 Window_MenuCommand.prototype.numVisibleRows = function() {
@@ -67,7 +67,7 @@ Window_MenuCommand.prototype.addOriginalCommands = function() {
 Window_MenuCommand.prototype.addOptionsCommand = function() {
     if (this.needsCommand('options')) {
         var enabled = this.isOptionsEnabled();
-        this.addCommand(TextManager.options, 'options', enabled);
+        this.addCommand('Options', 'options', enabled);
     }
 };
 

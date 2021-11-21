@@ -272,7 +272,7 @@ Window_Message.prototype.drawMessageFace = function() {
 };
 
 Window_Message.prototype.newLineX = function() {
-    return $gameMessage.faceName() === '' ? 0 : 168;
+    return $gameMessage.faceName() === '' ? 0 : 112;
 };
 
 Window_Message.prototype.processNewLine = function(textState) {

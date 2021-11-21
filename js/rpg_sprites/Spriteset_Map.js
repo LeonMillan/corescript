@@ -66,7 +66,7 @@ Spriteset_Map.prototype.createTilemap = function() {
 Spriteset_Map.prototype.loadTileset = function() {
     this._tileset = $gameMap.tileset();
     if (this._tileset) {
-        var tilesetNames = this._tileset.tilesetNames;
+        var tilesetNames = this._tileset.tileset_names;
         for (var i = 0; i < tilesetNames.length; i++) {
             this._tilemap.bitmaps[i] = ImageManager.loadTileset(tilesetNames[i]);
         }

@@ -69,7 +69,7 @@ Game_Vehicle.prototype.loadSystemSettings = function() {
     var vehicle = this.vehicle();
     this._mapId = vehicle.startMapId;
     this.setPosition(vehicle.startX, vehicle.startY);
-    this.setImage(vehicle.characterName, vehicle.characterIndex);
+    this.setImage(vehicle.character_name, vehicle.character_index);
 };
 
 Game_Vehicle.prototype.refresh = function() {
@@ -193,7 +193,7 @@ Game_Vehicle.prototype.updateAirshipAltitude = function() {
 };
 
 Game_Vehicle.prototype.maxAltitude = function() {
-    return 48;
+    return 28;
 };
 
 Game_Vehicle.prototype.isLowest = function() {

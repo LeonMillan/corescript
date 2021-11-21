@@ -18,8 +18,8 @@ Tilemap.prototype.initialize = function() {
     this._margin = 20;
     this._width = Graphics.width + this._margin * 2;
     this._height = Graphics.height + this._margin * 2;
-    this._tileWidth = 48;
-    this._tileHeight = 48;
+    this._tileWidth = 32;
+    this._tileHeight = 32;
     this._mapWidth = 0;
     this._mapHeight = 0;
     this._mapData = null;
@@ -360,8 +360,7 @@ Tilemap.prototype._paintTiles = function(startX, startY, x, y) {
     var tileId0 = this._readMapData(mx, my, 0);
     var tileId1 = this._readMapData(mx, my, 1);
     var tileId2 = this._readMapData(mx, my, 2);
-    var tileId3 = this._readMapData(mx, my, 3);
-    var shadowBits = this._readMapData(mx, my, 4);
+    var shadowBits = this._readMapData(mx, my, 3);
     var upperTileId1 = this._readMapData(mx, my - 1, 1);
     var lowerTiles = [];
     var upperTiles = [];
@@ -387,17 +386,11 @@ Tilemap.prototype._paintTiles = function(startX, startY, x, y) {
 
     if (this._isOverpassPosition(mx, my)) {
         upperTiles.push(tileId2);
-        upperTiles.push(tileId3);
     } else {
         if (this._isHigherTile(tileId2)) {
             upperTiles.push(tileId2);
         } else {
             lowerTiles.push(tileId2);
-        }
-        if (this._isHigherTile(tileId3)) {
-            upperTiles.push(tileId3);
-        } else {
-            lowerTiles.push(tileId3);
         }
     }
 
@@ -690,7 +683,8 @@ Tilemap.prototype._readMapData = function(x, y, z) {
             y = y.mod(height);
         }
         if (x >= 0 && x < width && y >= 0 && y < height) {
-            return this._mapData[(z * height + y) * width + x] || 0;
+            return this._mapData[z][y][x] || 0;
+            // return this._mapData[(z * height + y) * width + x] || 0;
         } else {
             return 0;
         }

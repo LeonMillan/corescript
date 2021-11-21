@@ -555,7 +555,14 @@ Game_Interpreter.prototype.command111 = function() {
             result = $gameParty.hasItem($dataArmors[this._params[1]], this._params[2]);
             break;
         case 11:  // Button
-            result = Input.isPressed(this._params[1]);
+            const aceButton = this._params[1];
+            let button = 'ok';
+            if (aceButton === 2) button = 'down';
+            if (aceButton === 4) button = 'left';
+            if (aceButton === 6) button = 'right';
+            if (aceButton === 8) button = 'up';
+            if (aceButton === 12) button = 'cancel';
+            result = Input.isPressed(button);
             break;
         case 12:  // Script
             try {
@@ -952,8 +959,14 @@ Game_Interpreter.prototype.command137 = function() {
 };
 
 // Change Window Color
-Game_Interpreter.prototype.command138 = function() {
-    $gameSystem.setWindowTone(this._params[0]);
+Game_Interpreter.prototype.command138 = function () {
+    const tone = this._params[0];
+    $gameSystem.setWindowTone([
+        tone.red,
+        tone.green,
+        tone.blue,
+        tone.gray,
+    ]);
     return true;
 };
 
@@ -1147,8 +1160,14 @@ Game_Interpreter.prototype.command222 = function() {
 };
 
 // Tint Screen
-Game_Interpreter.prototype.command223 = function() {
-    $gameScreen.startTint(this._params[0], this._params[1]);
+Game_Interpreter.prototype.command223 = function () {
+    const tone = this._params[0];
+    $gameScreen.startTint([
+        tone.red,
+        tone.green,
+        tone.blue,
+        tone.gray,
+    ], this._params[1]);
     if (this._params[2]) {
         this.wait(this._params[1]);
     }
@@ -1156,8 +1175,14 @@ Game_Interpreter.prototype.command223 = function() {
 };
 
 // Flash Screen
-Game_Interpreter.prototype.command224 = function() {
-    $gameScreen.startFlash(this._params[0], this._params[1]);
+Game_Interpreter.prototype.command224 = function () {
+    const color = this._params[0];
+    $gameScreen.startFlash([
+        color.red,
+        color.green,
+        color.blue,
+        color.alpha,
+    ], this._params[1]);
     if (this._params[2]) {
         this.wait(this._params[1]);
     }
@@ -1220,7 +1245,13 @@ Game_Interpreter.prototype.command233 = function() {
 
 // Tint Picture
 Game_Interpreter.prototype.command234 = function() {
-    $gameScreen.tintPicture(this._params[0], this._params[1], this._params[2]);
+    const tone = this._params[1];
+    $gameScreen.tintPicture(this._params[0], [
+        tone.red,
+        tone.green,
+        tone.blue,
+        tone.gray,
+    ], this._params[2]);
     if (this._params[3]) {
         this.wait(this._params[2]);
     }
@@ -1337,7 +1368,7 @@ Game_Interpreter.prototype.command282 = function() {
         this._imageReservationId = Utils.generateRuntimeId();
     }
 
-    var allReady = tileset.tilesetNames.map(function(tilesetName) {
+    var allReady = tileset.tileset_names.map(function(tilesetName) {
         return ImageManager.reserveTileset(tilesetName, 0, this._imageReservationId);
     }, this).every(function(bitmap) {return bitmap.isReady();});
 
@@ -1385,7 +1416,6 @@ Game_Interpreter.prototype.command285 = function() {
     case 2:     // Tile ID (Layer 1)
     case 3:     // Tile ID (Layer 2)
     case 4:     // Tile ID (Layer 3)
-    case 5:     // Tile ID (Layer 4)
         value = $gameMap.tileId(x, y, this._params[1] - 2);
         break;
     default:    // Region ID
@@ -1834,10 +1864,10 @@ Game_Interpreter.requestImagesForCommand = function(command) {
         case 212: case 337:
             if (params[1]) {
                 var animation = $dataAnimations[params[1]];
-                var name1 = animation.animation1Name;
-                var name2 = animation.animation2Name;
-                var hue1 = animation.animation1Hue;
-                var hue2 = animation.animation2Hue;
+                var name1 = animation.animation1_name;
+                var name2 = animation.animation2_name;
+                var hue1 = animation.animation1_hue;
+                var hue2 = animation.animation2_hue;
                 ImageManager.requestAnimation(name1, hue1);
                 ImageManager.requestAnimation(name2, hue2);
             }
@@ -1861,7 +1891,7 @@ Game_Interpreter.requestImagesForCommand = function(command) {
         // Change Tileset
         case 282:
             var tileset = $dataTilesets[params[0]];
-            tileset.tilesetNames.forEach(function(tilesetName) {
+            tileset.tileset_names.forEach(function(tilesetName) {
                 ImageManager.requestTileset(tilesetName);
             });
             break;
@@ -1899,8 +1929,8 @@ Game_Interpreter.requestImagesForCommand = function(command) {
         // Enemy Transform
         case 336:
             var enemy = $dataEnemies[params[1]];
-            var name = enemy.battlerName;
-            var hue = enemy.battlerHue;
+            var name = enemy.battler_name;
+            var hue = enemy.battler_hue;
             if ($gameSystem.isSideView()) {
                 ImageManager.requestSvEnemy(name, hue);
             } else {

@@ -8,7 +8,7 @@ function Game_Followers() {
 }
 
 Game_Followers.prototype.initialize = function() {
-    this._visible = $dataSystem.optFollowers;
+    this._visible = $dataSystem.opt_followers;
     this._gathering = false;
     this._data = [];
     for (var i = 1; i < $gameParty.maxBattleMembers(); i++) {

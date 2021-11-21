@@ -39,7 +39,7 @@ Game_Map.prototype.setup = function(mapId) {
         throw new Error('The map data is not available');
     }
     this._mapId = mapId;
-    this._tilesetId = $dataMap.tilesetId;
+    this._tilesetId = $dataMap.tileset_id;
     this._displayX = 0;
     this._displayY = 0;
     this.refereshVehicles();
@@ -55,11 +55,11 @@ Game_Map.prototype.isEventRunning = function() {
 };
 
 Game_Map.prototype.tileWidth = function() {
-    return 48;
+    return 32;
 };
 
 Game_Map.prototype.tileHeight = function() {
-    return 48;
+    return 32;
 };
 
 Game_Map.prototype.mapId = function() {
@@ -149,7 +149,7 @@ Game_Map.prototype.airship = function() {
 
 Game_Map.prototype.setupEvents = function() {
     this._events = [];
-    for (var i = 0; i < $dataMap.events.length; i++) {
+    for (let i in $dataMap.events) {
         if ($dataMap.events[i]) {
             this._events[i] = new Game_Event(this._mapId, i);
         }
@@ -187,20 +187,20 @@ Game_Map.prototype.setupScroll = function() {
 };
 
 Game_Map.prototype.setupParallax = function() {
-    this._parallaxName = $dataMap.parallaxName || '';
+    this._parallaxName = $dataMap.parallax_name || '';
     this._parallaxZero = ImageManager.isZeroParallax(this._parallaxName);
-    this._parallaxLoopX = $dataMap.parallaxLoopX;
-    this._parallaxLoopY = $dataMap.parallaxLoopY;
-    this._parallaxSx = $dataMap.parallaxSx;
-    this._parallaxSy = $dataMap.parallaxSy;
+    this._parallaxLoopX = $dataMap.parallax_loop_x;
+    this._parallaxLoopY = $dataMap.parallax_loop_y;
+    this._parallaxSx = $dataMap.parallax_sx;
+    this._parallaxSy = $dataMap.parallax_sy;
     this._parallaxX = 0;
     this._parallaxY = 0;
 };
 
 Game_Map.prototype.setupBattleback = function() {
-    if ($dataMap.specifyBattleback) {
-        this._battleback1Name = $dataMap.battleback1Name;
-        this._battleback2Name = $dataMap.battleback2Name;
+    if ($dataMap.specify_battleback) {
+        this._battleback1Name = $dataMap.battleback1_name;
+        this._battleback2Name = $dataMap.battleback2_name;
     } else {
         this._battleback1Name = null;
         this._battleback2Name = null;
@@ -253,14 +253,14 @@ Game_Map.prototype.tileset = function() {
 Game_Map.prototype.tilesetFlags = function() {
     var tileset = this.tileset();
     if (tileset) {
-        return tileset.flags;
+        return tileset.flags.elements;
     } else {
         return [];
     }
 };
 
 Game_Map.prototype.displayName = function() {
-    return $dataMap.displayName;
+    return $dataMap.display_name;
 };
 
 Game_Map.prototype.width = function() {
@@ -272,27 +272,27 @@ Game_Map.prototype.height = function() {
 };
 
 Game_Map.prototype.data = function() {
-    return $dataMap.data;
+    return $dataMap.data.elements;
 };
 
 Game_Map.prototype.isLoopHorizontal = function() {
-    return $dataMap.scrollType === 2 || $dataMap.scrollType === 3;
+    return $dataMap.scroll_type === 2 || $dataMap.scroll_type === 3;
 };
 
 Game_Map.prototype.isLoopVertical = function() {
-    return $dataMap.scrollType === 1 || $dataMap.scrollType === 3;
+    return $dataMap.scroll_type === 1 || $dataMap.scroll_type === 3;
 };
 
 Game_Map.prototype.isDashDisabled = function() {
-    return $dataMap.disableDashing;
+    return $dataMap.disable_dashing;
 };
 
 Game_Map.prototype.encounterList = function() {
-    return $dataMap.encounterList;
+    return $dataMap.encounter_list;
 };
 
 Game_Map.prototype.encounterStep = function() {
-    return $dataMap.encounterStep;
+    return $dataMap.encounter_step;
 };
 
 Game_Map.prototype.isOverworld = function() {
@@ -392,14 +392,14 @@ Game_Map.prototype.canvasToMapY = function(y) {
 };
 
 Game_Map.prototype.autoplay = function() {
-    if ($dataMap.autoplayBgm) {
+    if ($dataMap.autoplay_bgm) {
         if ($gamePlayer.isInVehicle()) {
             $gameSystem.saveWalkingBgm2();
         } else {
             AudioManager.playBgm($dataMap.bgm);
         }
     }
-    if ($dataMap.autoplayBgs) {
+    if ($dataMap.autoplay_bgs) {
         AudioManager.playBgs($dataMap.bgs);
     }
 };
@@ -528,15 +528,14 @@ Game_Map.prototype.checkPassage = function(x, y, bit) {
 };
 
 Game_Map.prototype.tileId = function(x, y, z) {
-    var width = $dataMap.width;
-    var height = $dataMap.height;
-    return $dataMap.data[(z * height + y) * width + x] || 0;
+    return $dataMap.data.elements[z][y][x] || 0;
+    //return $dataMap.data[(z * height + y) * width + x] || 0;
 };
 
 Game_Map.prototype.layeredTiles = function(x, y) {
     var tiles = [];
-    for (var i = 0; i < 4; i++) {
-        tiles.push(this.tileId(x, y, 3 - i));
+    for (var i = 0; i < 3; i++) {
+        tiles.push(this.tileId(x, y, 2 - i));
     }
     return tiles;
 };
@@ -607,7 +606,7 @@ Game_Map.prototype.terrainTag = function(x, y) {
 };
 
 Game_Map.prototype.regionId = function(x, y) {
-    return this.isValid(x, y) ? this.tileId(x, y, 5) : 0;
+    return this.isValid(x, y) ? (this.tileId(x, y, 3) >> 8) : 0;
 };
 
 Game_Map.prototype.startScroll = function(direction, distance, speed) {

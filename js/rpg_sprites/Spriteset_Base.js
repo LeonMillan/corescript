@@ -56,7 +56,7 @@ Spriteset_Base.prototype.createToneChanger = function() {
 };
 
 Spriteset_Base.prototype.createWebGLToneChanger = function() {
-    var margin = 48;
+    var margin = 32;
     var width = Graphics.width + margin * 2;
     var height = Graphics.height + margin * 2;
     this._toneFilter = new ToneFilter();

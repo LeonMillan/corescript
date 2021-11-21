@@ -45,8 +45,8 @@ Sprite_Balloon.prototype.update = function() {
 };
 
 Sprite_Balloon.prototype.updateFrame = function() {
-    var w = 48;
-    var h = 48;
+    var w = 32;
+    var h = 32;
     var sx = this.frameIndex() * w;
     var sy = (this._balloonId - 1) * h;
     this.setFrame(sx, sy, w, h);

@@ -37,7 +37,7 @@ var $gameMap          = null;
 var $gamePlayer       = null;
 var $testEvent        = null;
 
-DataManager._globalId       = 'RPGMV';
+DataManager._globalId       = 'RPGMV-Ace';
 DataManager._lastAccessedId = 1;
 DataManager._errorUrl       = null;
 DataManager._autoSaveFileId = 0;
@@ -116,7 +116,7 @@ DataManager.makeEmptyMap = function() {
     $dataMap.events = [];
     $dataMap.width = 100;
     $dataMap.height = 100;
-    $dataMap.scrollType = 3;
+    $dataMap.scroll_type = 3;
 };
 
 DataManager.isMapLoaded = function() {
@@ -214,8 +214,8 @@ DataManager.setupNewGame = function() {
     this.createGameObjects();
     this.selectSavefileForNewGame();
     $gameParty.setupStartingMembers();
-    $gamePlayer.reserveTransfer($dataSystem.startMapId,
-        $dataSystem.startX, $dataSystem.startY);
+    $gamePlayer.reserveTransfer($dataSystem.start_map_id,
+        $dataSystem.start_x, $dataSystem.start_y);
     Graphics.frameCount = 0;
     SceneManager.resetFrameCount();
 };
@@ -223,7 +223,7 @@ DataManager.setupNewGame = function() {
 DataManager.setupBattleTest = function() {
     this.createGameObjects();
     $gameParty.setupBattleTest();
-    BattleManager.setup($dataSystem.testTroopId, true, false);
+    BattleManager.setup($dataSystem.test_troop_id, true, false);
     BattleManager.setBattleTest(true);
     BattleManager.playBattleBgm();
 };
@@ -273,7 +273,7 @@ DataManager.isThisGameFile = function(savefileId) {
         } else {
             var savefile = globalInfo[savefileId];
             return (savefile.globalId === this._globalId &&
-                    savefile.title === $dataSystem.gameTitle);
+                    savefile.title === $dataSystem.game_title);
         }
     } else {
         return false;
@@ -420,7 +420,7 @@ DataManager.selectSavefileForNewGame = function() {
 DataManager.makeSavefileInfo = function() {
     var info = {};
     info.globalId   = this._globalId;
-    info.title      = $dataSystem.gameTitle;
+    info.title      = $dataSystem.game_title;
     info.characters = $gameParty.charactersForSavefile();
     info.faces      = $gameParty.facesForSavefile();
     info.playtime   = $gameSystem.playtimeText();

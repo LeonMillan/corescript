@@ -66,7 +66,7 @@ Game_Action.prototype.opponentsUnit = function() {
 
 Game_Action.prototype.setEnemyAction = function(action) {
     if (action) {
-        this.setSkill(action.skillId);
+        this.setSkill(action.skill_id);
     } else {
         this.clear();
     }
@@ -189,15 +189,15 @@ Game_Action.prototype.isMpRecover = function() {
 };
 
 Game_Action.prototype.isCertainHit = function() {
-    return this.item().hitType === Game_Action.HITTYPE_CERTAIN;
+    return this.item().hit_type === Game_Action.HITTYPE_CERTAIN;
 };
 
 Game_Action.prototype.isPhysical = function() {
-    return this.item().hitType === Game_Action.HITTYPE_PHYSICAL;
+    return this.item().hit_type === Game_Action.HITTYPE_PHYSICAL;
 };
 
 Game_Action.prototype.isMagical = function() {
-    return this.item().hitType === Game_Action.HITTYPE_MAGICAL;
+    return this.item().hit_type === Game_Action.HITTYPE_MAGICAL;
 };
 
 Game_Action.prototype.isAttack = function() {
@@ -210,7 +210,9 @@ Game_Action.prototype.isGuard = function() {
 
 Game_Action.prototype.isMagicSkill = function() {
     if (this.isSkill()) {
-        return $dataSystem.magicSkills.contains(this.item().stypeId);
+        // TODO: figure this out
+        // return $dataSystem.magicSkills.contains(this.item().stype_id);
+        return true;
     } else {
         return false;
     }
@@ -405,19 +407,19 @@ Game_Action.prototype.testItemEffect = function(target, effect) {
     case Game_Action.EFFECT_RECOVER_MP:
         return target.mp < target.mmp || effect.value1 < 0 || effect.value2 < 0;
     case Game_Action.EFFECT_ADD_STATE:
-        return !target.isStateAffected(effect.dataId);
+        return !target.isStateAffected(effect.data_id);
     case Game_Action.EFFECT_REMOVE_STATE:
-        return target.isStateAffected(effect.dataId);
+        return target.isStateAffected(effect.data_id);
     case Game_Action.EFFECT_ADD_BUFF:
-        return !target.isMaxBuffAffected(effect.dataId);
+        return !target.isMaxBuffAffected(effect.data_id);
     case Game_Action.EFFECT_ADD_DEBUFF:
-        return !target.isMaxDebuffAffected(effect.dataId);
+        return !target.isMaxDebuffAffected(effect.data_id);
     case Game_Action.EFFECT_REMOVE_BUFF:
-        return target.isBuffAffected(effect.dataId);
+        return target.isBuffAffected(effect.data_id);
     case Game_Action.EFFECT_REMOVE_DEBUFF:
-        return target.isDebuffAffected(effect.dataId);
+        return target.isDebuffAffected(effect.data_id);
     case Game_Action.EFFECT_LEARN_SKILL:
-        return target.isActor() && !target.isLearnedSkill(effect.dataId);
+        return target.isActor() && !target.isLearnedSkill(effect.data_id);
     default:
         return true;
     }
@@ -441,9 +443,9 @@ Game_Action.prototype.itemMrf = function(target) {
 
 Game_Action.prototype.itemHit = function(target) {
     if (this.isPhysical()) {
-        return this.item().successRate * 0.01 * this.subject().hit;
+        return this.item().success_rate * 0.01 * this.subject().hit;
     } else {
-        return this.item().successRate * 0.01;
+        return this.item().success_rate * 0.01;
     }
 };
 
@@ -521,10 +523,10 @@ Game_Action.prototype.evalDamageFormula = function(target) {
 };
 
 Game_Action.prototype.calcElementRate = function(target) {
-    if (this.item().damage.elementId < 0) {
+    if (this.item().damage.element_id < 0) {
         return this.elementsMaxRate(target, this.subject().attackElements());
     } else {
-        return target.elementRate(this.item().damage.elementId);
+        return target.elementRate(this.item().damage.element_id);
     }
 };
 
@@ -685,7 +687,7 @@ Game_Action.prototype.itemEffectGainTp = function(target, effect) {
 };
 
 Game_Action.prototype.itemEffectAddState = function(target, effect) {
-    if (effect.dataId === 0) {
+    if (effect.data_id === 0) {
         this.itemEffectAddAttackState(target, effect);
     } else {
         this.itemEffectAddNormalState(target, effect);
@@ -708,11 +710,11 @@ Game_Action.prototype.itemEffectAddAttackState = function(target, effect) {
 Game_Action.prototype.itemEffectAddNormalState = function(target, effect) {
     var chance = effect.value1;
     if (!this.isCertainHit()) {
-        chance *= target.stateRate(effect.dataId);
+        chance *= target.stateRate(effect.data_id);
         chance *= this.lukEffectRate(target);
     }
     if (Math.random() < chance) {
-        target.addState(effect.dataId);
+        target.addState(effect.data_id);
         this.makeSuccess(target);
     }
 };
@@ -720,53 +722,53 @@ Game_Action.prototype.itemEffectAddNormalState = function(target, effect) {
 Game_Action.prototype.itemEffectRemoveState = function(target, effect) {
     var chance = effect.value1;
     if (Math.random() < chance) {
-        target.removeState(effect.dataId);
+        target.removeState(effect.data_id);
         this.makeSuccess(target);
     }
 };
 
 Game_Action.prototype.itemEffectAddBuff = function(target, effect) {
-    target.addBuff(effect.dataId, effect.value1);
+    target.addBuff(effect.data_id, effect.value1);
     this.makeSuccess(target);
 };
 
 Game_Action.prototype.itemEffectAddDebuff = function(target, effect) {
-    var chance = target.debuffRate(effect.dataId) * this.lukEffectRate(target);
+    var chance = target.debuffRate(effect.data_id) * this.lukEffectRate(target);
     if (Math.random() < chance) {
-        target.addDebuff(effect.dataId, effect.value1);
+        target.addDebuff(effect.data_id, effect.value1);
         this.makeSuccess(target);
     }
 };
 
 Game_Action.prototype.itemEffectRemoveBuff = function(target, effect) {
-    if (target.isBuffAffected(effect.dataId)) {
-        target.removeBuff(effect.dataId);
+    if (target.isBuffAffected(effect.data_id)) {
+        target.removeBuff(effect.data_id);
         this.makeSuccess(target);
     }
 };
 
 Game_Action.prototype.itemEffectRemoveDebuff = function(target, effect) {
-    if (target.isDebuffAffected(effect.dataId)) {
-        target.removeBuff(effect.dataId);
+    if (target.isDebuffAffected(effect.data_id)) {
+        target.removeBuff(effect.data_id);
         this.makeSuccess(target);
     }
 };
 
 Game_Action.prototype.itemEffectSpecial = function(target, effect) {
-    if (effect.dataId === Game_Action.SPECIAL_EFFECT_ESCAPE) {
+    if (effect.data_id === Game_Action.SPECIAL_EFFECT_ESCAPE) {
         target.escape();
         this.makeSuccess(target);
     }
 };
 
 Game_Action.prototype.itemEffectGrow = function(target, effect) {
-    target.addParam(effect.dataId, Math.floor(effect.value1));
+    target.addParam(effect.data_id, Math.floor(effect.value1));
     this.makeSuccess(target);
 };
 
 Game_Action.prototype.itemEffectLearnSkill = function(target, effect) {
     if (target.isActor()) {
-        target.learnSkill(effect.dataId);
+        target.learnSkill(effect.data_id);
         this.makeSuccess(target);
     }
 };
@@ -779,7 +781,7 @@ Game_Action.prototype.makeSuccess = function(target) {
 };
 
 Game_Action.prototype.applyItemUserEffect = function(target) {
-    var value = Math.floor(this.item().tpGain * this.subject().tcr);
+    var value = Math.floor(this.item().tp_gain * this.subject().tcr);
     this.subject().gainSilentTp(value);
 };
 
@@ -790,7 +792,7 @@ Game_Action.prototype.lukEffectRate = function(target) {
 Game_Action.prototype.applyGlobal = function() {
     this.item().effects.forEach(function(effect) {
         if (effect.code === Game_Action.EFFECT_COMMON_EVENT) {
-            $gameTemp.reserveCommonEvent(effect.dataId);
+            $gameTemp.reserveCommonEvent(effect.data_id);
         }
     }, this);
 };

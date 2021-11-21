@@ -48,8 +48,8 @@ Scene_Title.prototype.terminate = function() {
 };
 
 Scene_Title.prototype.createBackground = function() {
-    this._backSprite1 = new Sprite(ImageManager.loadTitle1($dataSystem.title1Name));
-    this._backSprite2 = new Sprite(ImageManager.loadTitle2($dataSystem.title2Name));
+    this._backSprite1 = new Sprite(ImageManager.loadTitle1($dataSystem.title1_name));
+    this._backSprite2 = new Sprite(ImageManager.loadTitle2($dataSystem.title2_name));
     this.addChild(this._backSprite1);
     this.addChild(this._backSprite2);
 };
@@ -57,7 +57,7 @@ Scene_Title.prototype.createBackground = function() {
 Scene_Title.prototype.createForeground = function() {
     this._gameTitleSprite = new Sprite(new Bitmap(Graphics.width, Graphics.height));
     this.addChild(this._gameTitleSprite);
-    if ($dataSystem.optDrawTitle) {
+    if ($dataSystem.opt_draw_title) {
         this.drawGameTitle();
     }
 };
@@ -66,11 +66,11 @@ Scene_Title.prototype.drawGameTitle = function() {
     var x = 20;
     var y = Graphics.height / 4;
     var maxWidth = Graphics.width - x * 2;
-    var text = $dataSystem.gameTitle;
+    var text = $dataSystem.game_title;
     this._gameTitleSprite.bitmap.outlineColor = 'black';
-    this._gameTitleSprite.bitmap.outlineWidth = 8;
-    this._gameTitleSprite.bitmap.fontSize = 72;
-    this._gameTitleSprite.bitmap.drawText(text, x, y, maxWidth, 48, 'center');
+    this._gameTitleSprite.bitmap.outlineWidth = 2;
+    this._gameTitleSprite.bitmap.fontSize = 40;
+    this._gameTitleSprite.bitmap.drawText(text, x, y, maxWidth, 32, 'center');
 };
 
 Scene_Title.prototype.centerSprite = function(sprite) {
@@ -106,7 +106,7 @@ Scene_Title.prototype.commandOptions = function() {
 };
 
 Scene_Title.prototype.playTitleMusic = function() {
-    AudioManager.playBgm($dataSystem.titleBgm);
+    AudioManager.playBgm($dataSystem.title_bgm);
     AudioManager.stopBgs();
     AudioManager.stopMe();
 };

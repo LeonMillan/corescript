@@ -18,7 +18,7 @@ Window_PartyCommand.prototype.initialize = function() {
 };
 
 Window_PartyCommand.prototype.windowWidth = function() {
-    return 192;
+    return 128;
 };
 
 Window_PartyCommand.prototype.numVisibleRows = function() {

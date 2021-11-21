@@ -94,7 +94,7 @@ Spriteset_Battle.prototype.battleback2Bitmap = function() {
 
 Spriteset_Battle.prototype.battleback1Name = function() {
     if (BattleManager.isBattleTest()) {
-        return $dataSystem.battleback1Name;
+        return $dataSystem.battleback1_name;
     } else if ($gameMap.battleback1Name()) {
         return $gameMap.battleback1Name();
     } else if ($gameMap.isOverworld()) {
@@ -106,7 +106,7 @@ Spriteset_Battle.prototype.battleback1Name = function() {
 
 Spriteset_Battle.prototype.battleback2Name = function() {
     if (BattleManager.isBattleTest()) {
-        return $dataSystem.battleback2Name;
+        return $dataSystem.battleback2_name;
     } else if ($gameMap.battleback2Name()) {
         return $gameMap.battleback2Name();
     } else if ($gameMap.isOverworld()) {

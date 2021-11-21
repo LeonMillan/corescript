@@ -197,36 +197,36 @@ Game_Event.prototype.findProperPageIndex = function() {
 };
 
 Game_Event.prototype.meetsConditions = function(page) {
-    var c = page.conditions;
-    if (c.switch1Valid) {
-        if (!$gameSwitches.value(c.switch1Id)) {
+    var c = page.condition;
+    if (c.switch1_valid) {
+        if (!$gameSwitches.value(c.switch1_id)) {
             return false;
         }
     }
-    if (c.switch2Valid) {
-        if (!$gameSwitches.value(c.switch2Id)) {
+    if (c.switch2_valid) {
+        if (!$gameSwitches.value(c.switch2_id)) {
             return false;
         }
     }
-    if (c.variableValid) {
-        if ($gameVariables.value(c.variableId) < c.variableValue) {
+    if (c.variable_valid) {
+        if ($gameVariables.value(c.variable_id) < c.variable_value) {
             return false;
         }
     }
-    if (c.selfSwitchValid) {
-        var key = [this._mapId, this._eventId, c.selfSwitchCh];
+    if (c.self_switch_valid) {
+        var key = [this._mapId, this._eventId, c.self_switch_ch];
         if ($gameSelfSwitches.value(key) !== true) {
             return false;
         }
     }
-    if (c.itemValid) {
-        var item = $dataItems[c.itemId];
+    if (c.item_valid) {
+        var item = $dataItems[c.item_id];
         if (!$gameParty.hasItem(item)) {
             return false;
         }
     }
-    if (c.actorValid) {
-        var actor = $gameActors.actor(c.actorId);
+    if (c.actor_valid) {
+        var actor = $gameActors.actor(c.actor_id);
         if (!$gameParty.members().contains(actor)) {
             return false;
         }
@@ -255,11 +255,11 @@ Game_Event.prototype.clearPageSettings = function() {
 
 Game_Event.prototype.setupPageSettings = function() {
     var page = this.page();
-    var image = page.image;
-    if (image.tileId > 0) {
-        this.setTileImage(image.tileId);
+    var image = page.graphic;
+    if (image.tile_id > 0) {
+        this.setTileImage(image.tile_id);
     } else {
-        this.setImage(image.characterName, image.characterIndex);
+        this.setImage(image.character_name, image.character_index);
     }
     if (this._originalDirection !== image.direction) {
         this._originalDirection = image.direction;
@@ -271,15 +271,15 @@ Game_Event.prototype.setupPageSettings = function() {
         this._originalPattern = image.pattern;
         this.setPattern(image.pattern);
     }
-    this.setMoveSpeed(page.moveSpeed);
-    this.setMoveFrequency(page.moveFrequency);
-    this.setPriorityType(page.priorityType);
-    this.setWalkAnime(page.walkAnime);
-    this.setStepAnime(page.stepAnime);
-    this.setDirectionFix(page.directionFix);
+    this.setMoveSpeed(page.move_speed);
+    this.setMoveFrequency(page.move_frequency);
+    this.setPriorityType(page.priority_type);
+    this.setWalkAnime(page.walk_anime);
+    this.setStepAnime(page.step_anime);
+    this.setDirectionFix(page.direction_fix);
     this.setThrough(page.through);
-    this.setMoveRoute(page.moveRoute);
-    this._moveType = page.moveType;
+    this.setMoveRoute(page.move_route);
+    this._moveType = page.move_type;
     this._trigger = page.trigger;
     if (this._trigger === 4) {
         this._interpreter = new Game_Interpreter();

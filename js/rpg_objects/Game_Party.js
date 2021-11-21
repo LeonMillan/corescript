@@ -127,7 +127,7 @@ Game_Party.prototype.itemContainer = function(item) {
 
 Game_Party.prototype.setupStartingMembers = function() {
     this._actors = [];
-    $dataSystem.partyMembers.forEach(function(actorId) {
+    $dataSystem.party_members.forEach(function(actorId) {
         if ($gameActors.actor(actorId)) {
             this._actors.push(actorId);
         }
@@ -151,7 +151,7 @@ Game_Party.prototype.setupBattleTest = function() {
 };
 
 Game_Party.prototype.setupBattleTestMembers = function() {
-    $dataSystem.testBattlers.forEach(function(battler) {
+    $dataSystem.test_battlers.forEach(function(battler) {
         var actor = $gameActors.actor(battler.actorId);
         if (actor) {
             actor.changeLevel(battler.level, false);

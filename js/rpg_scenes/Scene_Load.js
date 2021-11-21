@@ -57,7 +57,7 @@ Scene_Load.prototype.onLoadFailure = function() {
 };
 
 Scene_Load.prototype.reloadMapIfUpdated = function() {
-    if ($gameSystem.versionId() !== $dataSystem.versionId) {
+    if ($gameSystem.versionId() !== $dataSystem.version_id) {
         $gamePlayer.reserveTransfer($gameMap.mapId(), $gamePlayer.x, $gamePlayer.y);
         $gamePlayer.requestMapReload();
     }

@@ -23,7 +23,7 @@ Window_ShopNumber.prototype.initialize = function(x, y, height) {
 };
 
 Window_ShopNumber.prototype.windowWidth = function() {
-    return 456;
+    return 304;
 };
 
 Window_ShopNumber.prototype.number = function() {

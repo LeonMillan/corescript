@@ -43,15 +43,20 @@ Window_EquipSlot.prototype.drawItem = function(index) {
         var rect = this.itemRectForText(index);
         this.changeTextColor(this.systemColor());
         this.changePaintOpacity(this.isEnabled(index));
-        this.drawText(this.slotName(index), rect.x, rect.y, 138, this.lineHeight());
-        this.drawItemName(this._actor.equips()[index], rect.x + 138, rect.y);
+        this.drawText(this.slotName(index), rect.x, rect.y, 108, this.lineHeight());
+        this.drawItemName(this._actor.equips()[index], rect.x + 108, rect.y);
         this.changePaintOpacity(true);
     }
 };
 
 Window_EquipSlot.prototype.slotName = function(index) {
-    var slots = this._actor.equipSlots();
-    return this._actor ? $dataSystem.equipTypes[slots[index]] : '';
+    return [
+        'Weapon',
+        'Shield',
+        'Head',
+        'Body',
+        'Accessory',
+    ][index];
 };
 
 Window_EquipSlot.prototype.isEnabled = function(index) {

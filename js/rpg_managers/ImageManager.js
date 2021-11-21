@@ -75,7 +75,7 @@ ImageManager.loadTitle2 = function(filename, hue) {
 
 ImageManager.loadBitmap = function(folder, filename, hue, smooth) {
     if (filename) {
-        var path = folder + encodeURIComponent(filename) + '.png';
+        var path = folder + encodeURIComponent(filename) + (filename.endsWith('.png') ? '' : '.png');
         var bitmap = this.loadNormalBitmap(path, hue || 0);
         bitmap.smooth = smooth;
         return bitmap;
@@ -194,7 +194,7 @@ ImageManager.reserveTitle2 = function(filename, hue, reservationId) {
 
 ImageManager.reserveBitmap = function(folder, filename, hue, smooth, reservationId) {
     if (filename) {
-        var path = folder + encodeURIComponent(filename) + '.png';
+        var path = folder + encodeURIComponent(filename) + (filename.endsWith('.png') ? '' : '.png');
         var bitmap = this.reserveNormalBitmap(path, hue || 0, reservationId || this._defaultReservationId);
         bitmap.smooth = smooth;
         return bitmap;
@@ -277,7 +277,7 @@ ImageManager.requestTitle2 = function(filename, hue) {
 
 ImageManager.requestBitmap = function(folder, filename, hue, smooth) {
     if (filename) {
-        var path = folder + encodeURIComponent(filename) + '.png';
+        var path = folder + encodeURIComponent(filename) + (filename.endsWith('.png') ? '' : '.png');
         var bitmap = this.requestNormalBitmap(path, hue || 0);
         bitmap.smooth = smooth;
         return bitmap;

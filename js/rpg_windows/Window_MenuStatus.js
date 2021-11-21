@@ -20,7 +20,7 @@ Window_MenuStatus.prototype.initialize = function(x, y) {
 };
 
 Window_MenuStatus.prototype.windowWidth = function() {
-    return Graphics.boxWidth - 240;
+    return Graphics.boxWidth - 160;
 };
 
 Window_MenuStatus.prototype.windowHeight = function() {
@@ -73,7 +73,7 @@ Window_MenuStatus.prototype.drawItemImage = function(index) {
 Window_MenuStatus.prototype.drawItemStatus = function(index) {
     var actor = $gameParty.members()[index];
     var rect = this.itemRect(index);
-    var x = rect.x + 162;
+    var x = rect.x + 112;
     var y = rect.y + rect.height / 2 - this.lineHeight() * 1.5;
     var width = rect.width - x - this.textPadding();
     this.drawActorSimpleStatus(actor, x, y, width);

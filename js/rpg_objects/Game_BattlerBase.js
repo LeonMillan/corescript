@@ -148,8 +148,8 @@ Game_BattlerBase.prototype.deathStateId = function() {
 
 Game_BattlerBase.prototype.resetStateCounts = function(stateId) {
     var state = $dataStates[stateId];
-    var variance = 1 + Math.max(state.maxTurns - state.minTurns, 0);
-    this._stateTurns[stateId] = state.minTurns + Math.randomInt(variance);
+    var variance = 1 + Math.max(state.max_turns - state.min_turns, 0);
+    this._stateTurns[stateId] = state.min_turns + Math.randomInt(variance);
 };
 
 Game_BattlerBase.prototype.isStateExpired = function(stateId) {
@@ -252,7 +252,7 @@ Game_BattlerBase.prototype.states = function() {
 
 Game_BattlerBase.prototype.stateIcons = function() {
     return this.states().map(function(state) {
-        return state.iconIndex;
+        return state.icon_index;
     }).filter(function(iconIndex) {
         return iconIndex > 0;
     });
@@ -289,7 +289,7 @@ Game_BattlerBase.prototype.traitObjects = function() {
 
 Game_BattlerBase.prototype.allTraits = function() {
     return this.traitObjects().reduce(function(r, obj) {
-        return r.concat(obj.traits);
+        return r.concat(obj.features);
     }, []);
 };
 
@@ -301,7 +301,7 @@ Game_BattlerBase.prototype.traits = function(code) {
 
 Game_BattlerBase.prototype.traitsWithId = function(code, id) {
     return this.allTraits().filter(function(trait) {
-        return trait.code === code && trait.dataId === id;
+        return trait.code === code && trait.data_id === id;
     });
 };
 
@@ -325,7 +325,7 @@ Game_BattlerBase.prototype.traitsSumAll = function(code) {
 
 Game_BattlerBase.prototype.traitsSet = function(code) {
     return this.traits(code).reduce(function(r, trait) {
-        return r.concat(trait.dataId);
+        return r.concat(trait.data_id);
     }, []);
 };
 
@@ -468,7 +468,7 @@ Game_BattlerBase.prototype.actionPlusSet = function() {
 
 Game_BattlerBase.prototype.specialFlag = function(flagId) {
     return this.traits(Game_BattlerBase.TRAIT_SPECIAL_FLAG).some(function(trait) {
-        return trait.dataId === flagId;
+        return trait.data_id === flagId;
     });
 };
 
@@ -479,7 +479,7 @@ Game_BattlerBase.prototype.collapseType = function() {
 
 Game_BattlerBase.prototype.partyAbility = function(abilityId) {
     return this.traits(Game_BattlerBase.TRAIT_PARTY_ABILITY).some(function(trait) {
-        return trait.dataId === abilityId;
+        return trait.data_id === abilityId;
     });
 };
 
@@ -671,11 +671,11 @@ Game_BattlerBase.prototype.isSkillWtypeOk = function(skill) {
 };
 
 Game_BattlerBase.prototype.skillMpCost = function(skill) {
-    return Math.floor(skill.mpCost * this.mcr);
+    return Math.floor(skill.mp_cost * this.mcr);
 };
 
 Game_BattlerBase.prototype.skillTpCost = function(skill) {
-    return skill.tpCost;
+    return skill.tp_cost;
 };
 
 Game_BattlerBase.prototype.canPaySkillCost = function(skill) {
@@ -702,7 +702,7 @@ Game_BattlerBase.prototype.meetsUsableItemConditions = function(item) {
 Game_BattlerBase.prototype.meetsSkillConditions = function(skill) {
     return (this.meetsUsableItemConditions(skill) &&
             this.isSkillWtypeOk(skill) && this.canPaySkillCost(skill) &&
-            !this.isSkillSealed(skill.id) && !this.isSkillTypeSealed(skill.stypeId));
+            !this.isSkillSealed(skill.id) && !this.isSkillTypeSealed(skill.stype_id));
 };
 
 Game_BattlerBase.prototype.meetsItemConditions = function(item) {
@@ -734,11 +734,11 @@ Game_BattlerBase.prototype.canEquip = function(item) {
 };
 
 Game_BattlerBase.prototype.canEquipWeapon = function(item) {
-    return this.isEquipWtypeOk(item.wtypeId) && !this.isEquipTypeSealed(item.etypeId);
+    return this.isEquipWtypeOk(item.wtype_id) && !this.isEquipTypeSealed(item.etype_id);
 };
 
 Game_BattlerBase.prototype.canEquipArmor = function(item) {
-    return this.isEquipAtypeOk(item.atypeId) && !this.isEquipTypeSealed(item.etypeId);
+    return this.isEquipAtypeOk(item.atype_id) && !this.isEquipTypeSealed(item.etype_id);
 };
 
 Game_BattlerBase.prototype.attackSkillId = function() {

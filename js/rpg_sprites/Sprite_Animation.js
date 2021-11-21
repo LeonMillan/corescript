@@ -132,10 +132,10 @@ Sprite_Animation.prototype.isPlaying = function() {
 };
 
 Sprite_Animation.prototype.loadBitmaps = function() {
-    var name1 = this._animation.animation1Name;
-    var name2 = this._animation.animation2Name;
-    var hue1 = this._animation.animation1Hue;
-    var hue2 = this._animation.animation2Hue;
+    var name1 = this._animation.animation1_name;
+    var name2 = this._animation.animation2_name;
+    var hue1 = this._animation.animation1_hue;
+    var hue2 = this._animation.animation2_hue;
     this._bitmap1 = ImageManager.loadAnimation(name1, hue1);
     this._bitmap2 = ImageManager.loadAnimation(name2, hue2);
 };
@@ -216,7 +216,7 @@ Sprite_Animation.prototype.updatePosition = function() {
 Sprite_Animation.prototype.updateFrame = function() {
     if (this._duration > 0) {
         var frameIndex = this.currentFrameIndex();
-        this.updateAllCellSprites(this._animation.frames[frameIndex]);
+        this.updateAllCellSprites(this._animation.frames[frameIndex].cell_data);
         this._animation.timings.forEach(function(timing) {
             if (timing.frame === frameIndex) {
                 this.processTimingData(timing);
@@ -231,10 +231,22 @@ Sprite_Animation.prototype.currentFrameIndex = function() {
 };
 
 Sprite_Animation.prototype.updateAllCellSprites = function(frame) {
+    const cellData = frame.elements;
     for (var i = 0; i < this._cellSprites.length; i++) {
         var sprite = this._cellSprites[i];
-        if (i < frame.length) {
-            this.updateCellSprite(sprite, frame[i]);
+        if (i < cellData.length) {
+            // Oh god, why?
+            const data = [
+                cellData[0][i],
+                cellData[1][i],
+                cellData[2][i],
+                cellData[3][i],
+                cellData[4][i],
+                cellData[5][i],
+                cellData[6][i],
+                cellData[7][i],
+            ];
+            this.updateCellSprite(sprite, data);
         } else {
             sprite.visible = false;
         }
@@ -273,13 +285,23 @@ Sprite_Animation.prototype.updateCellSprite = function(sprite, cell) {
 };
 
 Sprite_Animation.prototype.processTimingData = function(timing) {
-    var duration = timing.flashDuration * this._rate;
-    switch (timing.flashScope) {
+    var duration = timing.flash_duration * this._rate;
+    switch (timing.flash_scope) {
     case 1:
-        this.startFlash(timing.flashColor, duration);
+        this.startFlash([
+            timing.flash_color.red,
+            timing.flash_color.green,
+            timing.flash_color.blue,
+            timing.flash_color.alpha,
+        ], duration);
         break;
     case 2:
-        this.startScreenFlash(timing.flashColor, duration);
+        this.startScreenFlash([
+            timing.flash_color.red,
+            timing.flash_color.green,
+            timing.flash_color.blue,
+            timing.flash_color.alpha,
+        ], duration);
         break;
     case 3:
         this.startHiding(duration);

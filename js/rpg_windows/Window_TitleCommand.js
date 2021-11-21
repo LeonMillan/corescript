@@ -24,18 +24,18 @@ Window_TitleCommand.initCommandPosition = function() {
 };
 
 Window_TitleCommand.prototype.windowWidth = function() {
-    return 240;
+    return 160;
 };
 
 Window_TitleCommand.prototype.updatePlacement = function() {
     this.x = (Graphics.boxWidth - this.width) / 2;
-    this.y = Graphics.boxHeight - this.height - 96;
+    this.y = Graphics.boxHeight - this.height - 144;
 };
 
 Window_TitleCommand.prototype.makeCommandList = function() {
     this.addCommand(TextManager.newGame,   'newGame');
     this.addCommand(TextManager.continue_, 'continue', this.isContinueEnabled());
-    this.addCommand(TextManager.options,   'options');
+    this.addCommand('Options',             'options');
 };
 
 Window_TitleCommand.prototype.isContinueEnabled = function() {

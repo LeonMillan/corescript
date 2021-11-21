@@ -16,8 +16,8 @@ Sprite_StateIcon.prototype.initialize = function() {
     this.loadBitmap();
 };
 
-Sprite_StateIcon._iconWidth  = 32;
-Sprite_StateIcon._iconHeight = 32;
+Sprite_StateIcon._iconWidth  = 24;
+Sprite_StateIcon._iconHeight = 24;
 
 Sprite_StateIcon.prototype.initMembers = function() {
     this._battler = null;

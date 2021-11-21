@@ -23,10 +23,10 @@ SceneManager._sceneStarted      = false;
 SceneManager._exiting           = false;
 SceneManager._previousClass     = null;
 SceneManager._backgroundBitmap  = null;
-SceneManager._screenWidth       = 816;
-SceneManager._screenHeight      = 624;
-SceneManager._boxWidth          = 816;
-SceneManager._boxHeight         = 624;
+SceneManager._screenWidth       = 544;
+SceneManager._screenHeight      = 416;
+SceneManager._boxWidth          = 544;
+SceneManager._boxHeight         = 416;
 SceneManager._deltaTime = 1.0 / 60.0;
 if (!Utils.isMobileSafari()) SceneManager._currentTime = SceneManager._getTimeInMsWithoutMobileSafari();
 SceneManager._accumulator = 0.0;
@@ -60,8 +60,6 @@ SceneManager.initProgressWatcher = function(){
 SceneManager.initGraphics = function() {
     var type = this.preferableRendererType();
     Graphics.initialize(this._screenWidth, this._screenHeight, type);
-    Graphics.boxWidth = this._boxWidth;
-    Graphics.boxHeight = this._boxHeight;
     Graphics.setLoadingImage('img/system/Loading.png');
     if (Utils.isOptionValid('showfps')) {
         Graphics.showFps();

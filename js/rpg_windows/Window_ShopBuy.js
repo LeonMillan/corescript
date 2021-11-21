@@ -20,7 +20,7 @@ Window_ShopBuy.prototype.initialize = function(x, y, height, shopGoods) {
 };
 
 Window_ShopBuy.prototype.windowWidth = function() {
-    return 456;
+    return 304;
 };
 
 Window_ShopBuy.prototype.maxItems = function() {

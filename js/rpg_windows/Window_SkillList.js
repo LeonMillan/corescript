@@ -54,7 +54,7 @@ Window_SkillList.prototype.isCurrentItemEnabled = function() {
 };
 
 Window_SkillList.prototype.includes = function(item) {
-    return item && item.stypeId === this._stypeId;
+    return item && item.stype_id === this._stypeId;
 };
 
 Window_SkillList.prototype.isEnabled = function(item) {

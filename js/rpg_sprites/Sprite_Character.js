@@ -54,7 +54,7 @@ Sprite_Character.prototype.isTile = function() {
 Sprite_Character.prototype.tilesetBitmap = function(tileId) {
     var tileset = $gameMap.tileset();
     var setNumber = 5 + Math.floor(tileId / 256);
-    return ImageManager.loadTileset(tileset.tilesetNames[setNumber]);
+    return ImageManager.loadTileset(tileset.tileset_names[setNumber]);
 };
 
 Sprite_Character.prototype.updateBitmap = function() {

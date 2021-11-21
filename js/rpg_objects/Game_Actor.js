@@ -48,9 +48,9 @@ Game_Actor.prototype.setup = function(actorId) {
     this._actorId = actorId;
     this._name = actor.name;
     this._nickname = actor.nickname;
-    this._profile = actor.profile;
-    this._classId = actor.classId;
-    this._level = actor.initialLevel;
+    this._profile = actor.description;
+    this._classId = actor.class_id;
+    this._level = actor.initial_level;
     this.initImages();
     this.initExp();
     this.initSkills();
@@ -123,24 +123,24 @@ Game_Actor.prototype.eraseState = function(stateId) {
 
 Game_Actor.prototype.resetStateCounts = function(stateId) {
     Game_Battler.prototype.resetStateCounts.call(this, stateId);
-    this._stateSteps[stateId] = $dataStates[stateId].stepsToRemove;
+    this._stateSteps[stateId] = $dataStates[stateId].steps_to_remove;
 };
 
 Game_Actor.prototype.initImages = function() {
     var actor = this.actor();
-    this._characterName = actor.characterName;
-    this._characterIndex = actor.characterIndex;
-    this._faceName = actor.faceName;
-    this._faceIndex = actor.faceIndex;
-    this._battlerName = actor.battlerName;
+    this._characterName = actor.character_name;
+    this._characterIndex = actor.character_index;
+    this._faceName = actor.face_name;
+    this._faceIndex = actor.face_index;
+    this._battlerName = actor.battler_name;
 };
 
 Game_Actor.prototype.expForLevel = function(level) {
     var c = this.currentClass();
-    var basis = c.expParams[0];
-    var extra = c.expParams[1];
-    var acc_a = c.expParams[2];
-    var acc_b = c.expParams[3];
+    var basis = c.exp_params[0];
+    var extra = c.exp_params[1];
+    var acc_a = c.exp_params[2];
+    var acc_b = c.exp_params[3];
     return Math.round(basis*(Math.pow(level-1, 0.9+acc_a/250))*level*
             (level+1)/(6+Math.pow(level,2)/50/acc_b)+(level-1)*extra);
 };
@@ -166,7 +166,7 @@ Game_Actor.prototype.nextRequiredExp = function() {
 };
 
 Game_Actor.prototype.maxLevel = function() {
-    return this.actor().maxLevel;
+    return this.actor().max_level;
 };
 
 Game_Actor.prototype.isMaxLevel = function() {
@@ -177,7 +177,7 @@ Game_Actor.prototype.initSkills = function() {
     this._skills = [];
     this.currentClass().learnings.forEach(function(learning) {
         if (learning.level <= this._level) {
-            this.learnSkill(learning.skillId);
+            this.learnSkill(learning.skill_id);
         }
     }, this);
 };
@@ -191,7 +191,7 @@ Game_Actor.prototype.initEquips = function(equips) {
     }
     for (var j = 0; j < equips.length; j++) {
         if (j < maxSlots) {
-            this._equips[j].setEquip(slots[j] === 1, equips[j]);
+            this._equips[j].setEquip(slots[j] === 0, equips[j]);
         }
     }
     this.releaseUnequippableItems(true);
@@ -199,14 +199,10 @@ Game_Actor.prototype.initEquips = function(equips) {
 };
 
 Game_Actor.prototype.equipSlots = function() {
-    var slots = [];
-    for (var i = 1; i < $dataSystem.equipTypes.length; i++) {
-        slots.push(i);
+    if (this.isDualWield()) {
+        return [0, 0, 2, 3, 4];
     }
-    if (slots.length >= 2 && this.isDualWield()) {
-        slots[1] = 1;
-    }
-    return slots;
+    return [0, 1, 2, 3, 4];
 };
 
 Game_Actor.prototype.equips = function() {
@@ -242,7 +238,7 @@ Game_Actor.prototype.isEquipChangeOk = function(slotId) {
 
 Game_Actor.prototype.changeEquip = function(slotId, item) {
     if (this.tradeItemWithParty(item, this.equips()[slotId]) &&
-            (!item || this.equipSlots()[slotId] === item.etypeId)) {
+            (!item || this.equipSlots()[slotId] === item.etype_id)) {
         this._equips[slotId].setObject(item);
         this.refresh();
     }
@@ -266,7 +262,7 @@ Game_Actor.prototype.tradeItemWithParty = function(newItem, oldItem) {
 
 Game_Actor.prototype.changeEquipById = function(etypeId, itemId) {
     var slotId = etypeId - 1;
-    if (this.equipSlots()[slotId] === 1) {
+    if (this.equipSlots()[slotId] === 0) {
         this.changeEquip(slotId, $dataWeapons[itemId]);
     } else {
         this.changeEquip(slotId, $dataArmors[itemId]);
@@ -291,7 +287,11 @@ Game_Actor.prototype.releaseUnequippableItems = function(forcing) {
         var changed = false;
         for (var i = 0; i < equips.length; i++) {
             var item = equips[i];
-            if (item && (!this.canEquip(item) || item.etypeId !== slots[i])) {
+            if (!item) continue;
+
+            const validEquipSlot = item.etype_id === slots[i];
+
+            if (item && (!this.canEquip(item) || !validEquipSlot)) {
                 if (!forcing) {
                     this.tradeItemWithParty(null, item);
                 }
@@ -327,7 +327,7 @@ Game_Actor.prototype.optimizeEquipments = function() {
 Game_Actor.prototype.bestEquipItem = function(slotId) {
     var etypeId = this.equipSlots()[slotId];
     var items = $gameParty.equipItems().filter(function(item) {
-        return item.etypeId === etypeId && this.canEquip(item);
+        return item.etype_id === etypeId && this.canEquip(item);
     }, this);
     var bestItem = null;
     var bestPerformance = -1000;
@@ -348,8 +348,8 @@ Game_Actor.prototype.calcEquipItemPerformance = function(item) {
 };
 
 Game_Actor.prototype.isSkillWtypeOk = function(skill) {
-    var wtypeId1 = skill.requiredWtypeId1;
-    var wtypeId2 = skill.requiredWtypeId2;
+    var wtypeId1 = skill.required_wtype_id1;
+    var wtypeId2 = skill.required_wtype_id2;
     if ((wtypeId1 === 0 && wtypeId2 === 0) ||
             (wtypeId1 > 0 && this.isWtypeEquipped(wtypeId1)) ||
             (wtypeId2 > 0 && this.isWtypeEquipped(wtypeId2))) {
@@ -361,7 +361,7 @@ Game_Actor.prototype.isSkillWtypeOk = function(skill) {
 
 Game_Actor.prototype.isWtypeEquipped = function(wtypeId) {
     return this.weapons().some(function(weapon) {
-        return weapon.wtypeId === wtypeId;
+        return weapon.wtype_id === wtypeId;
     });
 };
 
@@ -455,7 +455,7 @@ Game_Actor.prototype.paramMax = function(paramId) {
 };
 
 Game_Actor.prototype.paramBase = function(paramId) {
-    return this.currentClass().params[paramId][this._level];
+    return this.currentClass().params.elements[this._level][paramId];
 };
 
 Game_Actor.prototype.paramPlus = function(paramId) {
@@ -483,13 +483,13 @@ Game_Actor.prototype.attackAnimationId1 = function() {
         return this.bareHandsAnimationId();
     } else {
         var weapons = this.weapons();
-        return weapons[0] ? weapons[0].animationId : 0;
+        return weapons[0] ? weapons[0].animation_id : 0;
     }
 };
 
 Game_Actor.prototype.attackAnimationId2 = function() {
     var weapons = this.weapons();
-    return weapons[1] ? weapons[1].animationId : 0;
+    return weapons[1] ? weapons[1].animation_id : 0;
 };
 
 Game_Actor.prototype.bareHandsAnimationId = function() {
@@ -516,7 +516,7 @@ Game_Actor.prototype.levelUp = function() {
     this._level++;
     this.currentClass().learnings.forEach(function(learning) {
         if (learning.level === this._level) {
-            this.learnSkill(learning.skillId);
+            this.learnSkill(learning.skill_id);
         }
     }, this);
 };
@@ -555,7 +555,7 @@ Game_Actor.prototype.finalExpRate = function() {
 };
 
 Game_Actor.prototype.benchMembersExpRate = function() {
-    return $dataSystem.optExtraExp ? 1 : 0.7;
+    return $dataSystem.opt_extra_exp ? 1 : 0.7;
 };
 
 Game_Actor.prototype.shouldDisplayLevelUp = function() {
@@ -647,9 +647,7 @@ Game_Actor.prototype.performActionEnd = function() {
 };
 
 Game_Actor.prototype.performAttack = function() {
-    var weapons = this.weapons();
-    var wtypeId = weapons[0] ? weapons[0].wtypeId : 0;
-    var attackMotion = $dataSystem.attackMotions[wtypeId];
+    var attackMotion = 0;
     if (attackMotion) {
         if (attackMotion.type === 0) {
             this.requestMotion('thrust');
@@ -769,7 +767,7 @@ Game_Actor.prototype.onPlayerWalk = function() {
 };
 
 Game_Actor.prototype.updateStateSteps = function(state) {
-    if (state.removeByWalking) {
+    if (state.remove_by_walking) {
         if (this._stateSteps[state.id] > 0) {
             if (--this._stateSteps[state.id] === 0) {
                 this.removeState(state.id);
@@ -827,7 +825,7 @@ Game_Actor.prototype.basicFloorDamage = function() {
 };
 
 Game_Actor.prototype.maxFloorDamage = function() {
-    return $dataSystem.optFloorDeath ? this.hp : Math.max(this.hp - 1, 0);
+    return Math.max(this.hp - 1, 0);
 };
 
 Game_Actor.prototype.performMapDamage = function() {

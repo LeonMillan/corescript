@@ -23,7 +23,7 @@ Window.prototype.initialize = function() {
     this._openness = 255;
     this._animationCount = 0;
 
-    this._padding = 18;
+    this._padding = 12;
     this._margin = 4;
     this._colorTone = [0, 0, 0];
 
@@ -427,7 +427,7 @@ Window.prototype._refreshBack = function() {
     this._windowBackSprite.move(m, m);
 
     if (w > 0 && h > 0 && this._windowskin) {
-        var p = 96;
+        var p = 64;
         bitmap.blt(this._windowskin, 0, 0, p, p, 0, 0, w, h);
         for (var y = 0; y < h; y += p) {
             for (var x = 0; x < w; x += p) {
@@ -446,7 +446,7 @@ Window.prototype._refreshBack = function() {
 Window.prototype._refreshFrame = function() {
     var w = this._width;
     var h = this._height;
-    var m = 24;
+    var m = 8;
     var bitmap = new Bitmap(w, h);
 
     this._windowFrameSprite.bitmap = bitmap;
@@ -454,16 +454,16 @@ Window.prototype._refreshFrame = function() {
 
     if (w > 0 && h > 0 && this._windowskin) {
         var skin = this._windowskin;
-        var p = 96;
-        var q = 96;
-        bitmap.blt(skin, p+m, 0+0, p-m*2, m, m, 0, w-m*2, m);
-        bitmap.blt(skin, p+m, 0+q-m, p-m*2, m, m, h-m, w-m*2, m);
-        bitmap.blt(skin, p+0, 0+m, m, p-m*2, 0, m, m, h-m*2);
-        bitmap.blt(skin, p+q-m, 0+m, m, p-m*2, w-m, m, m, h-m*2);
-        bitmap.blt(skin, p+0, 0+0, m, m, 0, 0, m, m);
-        bitmap.blt(skin, p+q-m, 0+0, m, m, w-m, 0, m, m);
-        bitmap.blt(skin, p+0, 0+q-m, m, m, 0, h-m, m, m);
-        bitmap.blt(skin, p+q-m, 0+q-m, m, m, w-m, h-m, m, m);
+        var p = 64;
+        var q = 64;
+        bitmap.blt(skin,  p+m,    0+0,    p-m*2,  m,      m,    0,    w-m*2,  m);
+        bitmap.blt(skin,  p+m,    0+q-m,  p-m*2,  m,      m,    h-m,  w-m*2,  m);
+        bitmap.blt(skin,  p+0,    0+m,    m,      p-m*2,  0,    m,    m,      h-m*2);
+        bitmap.blt(skin,  p+q-m,  0+m,    m,      p-m*2,  w-m,  m,    m,      h-m*2);
+        bitmap.blt(skin,  p+0,    0+0,    m,      m,      0,    0,    m,      m);
+        bitmap.blt(skin,  p+q-m,  0+0,    m,      m,      w-m,  0,    m,      m);
+        bitmap.blt(skin,  p+0,    0+q-m,  m,      m,      0,    h-m,  m,      m);
+        bitmap.blt(skin,  p+q-m,  0+q-m,  m,      m,      w-m,  h-m,  m,      m);
     }
 };
 
@@ -492,8 +492,8 @@ Window.prototype._refreshCursor = function() {
 
     if (w > 0 && h > 0 && this._windowskin) {
         var skin = this._windowskin;
-        var p = 96;
-        var q = 48;
+        var p = 64;
+        var q = 32;
         bitmap.blt(skin, p+m, p+m, q-m*2, q-m*2, ox+m, oy+m, w-m*2, h-m*2);
         bitmap.blt(skin, p+m, p+0, q-m*2, m, ox+m, oy+0, w-m*2, m);
         bitmap.blt(skin, p+m, p+q-m, q-m*2, m, ox+m, oy+h-m, w-m*2, m);
@@ -521,9 +521,9 @@ Window.prototype._refreshContents = function() {
 Window.prototype._refreshArrows = function() {
     var w = this._width;
     var h = this._height;
-    var p = 24;
+    var p = 16;
     var q = p/2;
-    var sx = 96+p;
+    var sx = 64+p;
     var sy = 0+p;
     this._downArrowSprite.bitmap = this._windowskin;
     this._downArrowSprite.anchor.x = 0.5;
@@ -542,9 +542,9 @@ Window.prototype._refreshArrows = function() {
  * @private
  */
 Window.prototype._refreshPauseSign = function() {
-    var sx = 144;
-    var sy = 96;
-    var p = 24;
+    var sx = 96;
+    var sy = 64;
+    var p = 16;
     this._windowPauseSignSprite.bitmap = this._windowskin;
     this._windowPauseSignSprite.anchor.x = 0.5;
     this._windowPauseSignSprite.anchor.y = 1;
@@ -603,9 +603,9 @@ Window.prototype._updatePauseSign = function() {
     var sprite = this._windowPauseSignSprite;
     var x = Math.floor(this._animationCount / 16) % 2;
     var y = Math.floor(this._animationCount / 16 / 2) % 2;
-    var sx = 144;
-    var sy = 96;
-    var p = 24;
+    var sx = 96;
+    var sy = 64;
+    var p = 16;
     if (!this.pause) {
         sprite.alpha = 0;
     } else if (sprite.alpha < 1) {

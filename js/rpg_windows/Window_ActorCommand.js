@@ -19,7 +19,7 @@ Window_ActorCommand.prototype.initialize = function() {
 };
 
 Window_ActorCommand.prototype.windowWidth = function() {
-    return 192;
+    return 128;
 };
 
 Window_ActorCommand.prototype.numVisibleRows = function() {
@@ -45,7 +45,7 @@ Window_ActorCommand.prototype.addSkillCommands = function() {
         return a - b;
     });
     skillTypes.forEach(function(stypeId) {
-        var name = $dataSystem.skillTypes[stypeId];
+        var name = $dataSystem.skill_types[stypeId];
         this.addCommand(name, 'skill', true, stypeId);
     }, this);
 };
@@ -87,7 +87,7 @@ Window_ActorCommand.prototype.selectLast = function() {
         if (symbol === 'skill') {
             var skill = this._actor.lastBattleSkill();
             if (skill) {
-                this.selectExt(skill.stypeId);
+                this.selectExt(skill.stype_id);
             }
         }
     }

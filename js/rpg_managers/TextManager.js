@@ -7,20 +7,24 @@ function TextManager() {
     throw new Error('This is a static class');
 }
 
-TextManager.basic = function(basicId) {
-    return $dataSystem.terms.basic[basicId] || '';
+TextManager.rubyText = function(textId) {
+    return RUBY_TEXT[textId];
+}
+
+TextManager.basic = function(textId) {
+    return $dataSystem.terms.basic[textId] || this.rubyText(textId) || '';
 };
 
-TextManager.param = function(paramId) {
-    return $dataSystem.terms.params[paramId] || '';
+TextManager.param = function(textId) {
+    return $dataSystem.terms.params[textId] || this.rubyText(textId) || '';
 };
 
-TextManager.command = function(commandId) {
-    return $dataSystem.terms.commands[commandId] || '';
+TextManager.command = function(textId) {
+    return $dataSystem.terms.commands[textId] || this.rubyText(textId) || '';
 };
 
-TextManager.message = function(messageId) {
-    return $dataSystem.terms.messages[messageId] || '';
+TextManager.message = function(textId) {
+    return this.rubyText(textId) || '';
 };
 
 TextManager.getter = function(method, param) {
@@ -33,9 +37,89 @@ TextManager.getter = function(method, param) {
 };
 
 Object.defineProperty(TextManager, 'currencyUnit', {
-    get: function() { return $dataSystem.currencyUnit; },
+    get: function() { return $dataSystem.currency_unit; },
     configurable: true
 });
+
+const RUBY_TEXT = {
+    // Shop Screen
+    shopBuy: "Buy",
+    shopSell: "Sell",
+    shopCancel: "Cancel",
+    possession: "Possession",
+
+    // Status Screen
+    expTotal: "Current Exp",
+    expNext: "To Next %1",
+
+    // Save / Load Screen
+    saveMessage: "Save to which file?",
+    loadMessage: "Load which file?",
+    file: "File",
+
+    // Display when there are multiple members
+    partyName: "%1's Party",
+
+    // Basic Battle Messages
+    emerge: "%1 emerged!",
+    preemptive: "%1 got the upper hand!",
+    surprise: "%1 was surprised!",
+    escapeStart: "%1 has started to escape!",
+    escapeFailure: "However, it was unable to escape!",
+
+    // Battle Ending Messages
+    victory: "%1 was victorious!",
+    defeat: "%1 was defeated.",
+    obtainExp: "%1 EXP received!",
+    obtainGold: "%1\\G found!",
+    obtainItem: "%1 found!",
+    levelUp: "%1 is now %2 %3!",
+    obtainSkill: "%1 learned!",
+
+    // Use Item
+    useItem: "%1 uses %2!",
+
+    // Critical Hit
+    criticalToEnemy: "An excellent hit!!",
+    criticalToActor: "A painful blow!!",
+
+    // Results for Actions on Actors
+    actorDamage: "%1 took %1 damage!",
+    actorRecovery: "%1 recovered %2 %3!",
+    actorGain: "%1 gained %2 %3!",
+    actorLoss: "%1 lost %2 %3!",
+    actorDrain: "%1 was drained of %2 %3!",
+    actorNoDamage: "%1 took no damage!",
+    actorNoHit: "Miss! %1 took no damage!",
+
+    // Results for Actions on Enemies
+    enemyDamage: "%1 took %1 damage!",
+    enemyRecovery: "%1 recovered %2 %3!",
+    enemyGain: "%1 gained %2 %3!",
+    enemyLoss: "%1 lost %2 %3!",
+    enemyDrain: "Drained %1 %2 from %3!",
+    enemyNoDamage: "%1 took no damage!",
+    enemyNoHit: "Missed! %1 took no damage!",
+
+    // Evasion / Reflection
+    evasion: "%1 evaded the attack!",
+    magicEvasion: "%1 nullified the magic!",
+    magicReflection: "%1 reflected the magic!",
+    counterAttack: "%1 counterattacked!",
+    substitute: "%1 protected %2!",
+
+    // Buff / Debuff
+    buffAdd: "%1's %2 went up!",
+    debuffAdd: "%1's %2 went down!",
+    buffRemove: "%1's %2 returned to normal.",
+
+    // Skill or Item Had No Effect
+    actionFailure: "There was no effect on %1!",
+
+    // Error Message
+    playerPosError: "Player's starting position is not set.",
+    eventOverflow: "Common event calls exceeded the limit.",
+}
 
 Object.defineProperties(TextManager, {
     level           : TextManager.getter('basic', 0),
@@ -70,8 +154,8 @@ Object.defineProperties(TextManager, {
     continue_       : TextManager.getter('command', 19),
     toTitle         : TextManager.getter('command', 21),
     cancel          : TextManager.getter('command', 22),
-    buy             : TextManager.getter('command', 24),
-    sell            : TextManager.getter('command', 25),
+    buy             : TextManager.getter('message', 'shopBuy'),
+    sell            : TextManager.getter('message', 'shopSell'),
     alwaysDash      : TextManager.getter('message', 'alwaysDash'),
     commandRemember : TextManager.getter('message', 'commandRemember'),
     bgmVolume       : TextManager.getter('message', 'bgmVolume'),

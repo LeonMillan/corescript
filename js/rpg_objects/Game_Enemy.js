@@ -76,9 +76,9 @@ Game_Enemy.prototype.gold = function() {
 };
 
 Game_Enemy.prototype.makeDropItems = function() {
-    return this.enemy().dropItems.reduce(function(r, di) {
+    return this.enemy().drop_items.reduce(function(r, di) {
         if (di.kind > 0 && Math.random() * di.denominator < this.dropItemRate()) {
-            return r.concat(this.itemObject(di.kind, di.dataId));
+            return r.concat(this.itemObject(di.kind, di.data_id));
         } else {
             return r;
         }
@@ -115,11 +115,11 @@ Game_Enemy.prototype.screenY = function() {
 };
 
 Game_Enemy.prototype.battlerName = function() {
-    return this.enemy().battlerName;
+    return this.enemy().battler_name;
 };
 
 Game_Enemy.prototype.battlerHue = function() {
-    return this.enemy().battlerHue;
+    return this.enemy().battler_hue;
 };
 
 Game_Enemy.prototype.originalName = function() {
@@ -192,9 +192,9 @@ Game_Enemy.prototype.transform = function(enemyId) {
 };
 
 Game_Enemy.prototype.meetsCondition = function(action) {
-    var param1 = action.conditionParam1;
-    var param2 = action.conditionParam2;
-    switch (action.conditionType) {
+    var param1 = action.condition_param1;
+    var param2 = action.condition_param2;
+    switch (action.condition_type) {
     case 1:
         return this.meetsTurnCondition(param1, param2);
     case 2:
@@ -242,7 +242,7 @@ Game_Enemy.prototype.meetsSwitchCondition = function(param) {
 };
 
 Game_Enemy.prototype.isActionValid = function(action) {
-    return this.meetsCondition(action) && this.canUse($dataSkills[action.skillId]);
+    return this.meetsCondition(action) && this.canUse($dataSkills[action.skill_id]);
 };
 
 Game_Enemy.prototype.selectAction = function(actionList, ratingZero) {

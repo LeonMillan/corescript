@@ -73,7 +73,7 @@ Window_ShopStatus.prototype.drawActorEquipInfo = function(x, y, actor) {
     this.changePaintOpacity(enabled);
     this.resetTextColor();
     this.drawText(actor.name(), x, y, 168);
-    var item1 = this.currentEquippedItem(actor, this._item.etypeId);
+    var item1 = this.currentEquippedItem(actor, this._item.etype_id);
     if (enabled) {
         this.drawActorParamChange(x, y, actor, item1);
     }

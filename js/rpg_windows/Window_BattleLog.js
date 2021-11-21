@@ -263,11 +263,11 @@ Window_BattleLog.prototype.showNormalAnimation = function(targets, animationId, 
 };
 
 Window_BattleLog.prototype.animationBaseDelay = function() {
-    return 8;
+    return 4;
 };
 
 Window_BattleLog.prototype.animationNextDelay = function() {
-    return 12;
+    return 6;
 };
 
 Window_BattleLog.prototype.refresh = function() {
@@ -319,7 +319,7 @@ Window_BattleLog.prototype.startAction = function(subject, action, targets) {
     this.push('performActionStart', subject, action);
     this.push('waitForMovement');
     this.push('performAction', subject, action);
-    this.push('showAnimation', subject, targets.clone(), item.animationId);
+    this.push('showAnimation', subject, targets.clone(), item.animation_id);
     this.displayAction(subject, item);
 };
 

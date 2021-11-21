@@ -41,24 +41,24 @@ Window_Status.prototype.refresh = function() {
 };
 
 Window_Status.prototype.drawBlock1 = function(y) {
-    this.drawActorName(this._actor, 6, y);
-    this.drawActorClass(this._actor, 192, y);
-    this.drawActorNickname(this._actor, 432, y);
+    this.drawActorName(this._actor, 4, y);
+    this.drawActorClass(this._actor, 128, y);
+    this.drawActorNickname(this._actor, 288, y);
 };
 
 Window_Status.prototype.drawBlock2 = function(y) {
-    this.drawActorFace(this._actor, 12, y);
-    this.drawBasicInfo(204, y);
-    this.drawExpInfo(456, y);
+    this.drawActorFace(this._actor, 8, y);
+    this.drawBasicInfo(136, y);
+    this.drawExpInfo(304, y);
 };
 
 Window_Status.prototype.drawBlock3 = function(y) {
-    this.drawParameters(48, y);
-    this.drawEquipments(432, y);
+    this.drawParameters(32, y);
+    this.drawEquipments(288, y);
 };
 
 Window_Status.prototype.drawBlock4 = function(y) {
-    this.drawProfile(6, y);
+    this.drawProfile(4, y);
 };
 
 Window_Status.prototype.drawHorzLine = function(y) {
@@ -86,9 +86,9 @@ Window_Status.prototype.drawParameters = function(x, y) {
         var paramId = i + 2;
         var y2 = y + lineHeight * i;
         this.changeTextColor(this.systemColor());
-        this.drawText(TextManager.param(paramId), x, y2, 160);
+        this.drawText(TextManager.param(paramId), x, y2, 128);
         this.resetTextColor();
-        this.drawText(this._actor.param(paramId), x + 160, y2, 60, 'right');
+        this.drawText(this._actor.param(paramId), x + 128, y2, 60, 'right');
     }
 };
 
@@ -103,11 +103,11 @@ Window_Status.prototype.drawExpInfo = function(x, y) {
         value2 = '-------';
     }
     this.changeTextColor(this.systemColor());
-    this.drawText(expTotal, x, y + lineHeight * 0, 270);
-    this.drawText(expNext, x, y + lineHeight * 2, 270);
+    this.drawText(expTotal, x, y + lineHeight * 0, 180);
+    this.drawText(expNext, x, y + lineHeight * 2, 180);
     this.resetTextColor();
-    this.drawText(value1, x, y + lineHeight * 1, 270, 'right');
-    this.drawText(value2, x, y + lineHeight * 3, 270, 'right');
+    this.drawText(value1, x, y + lineHeight * 1, 180, 'right');
+    this.drawText(value2, x, y + lineHeight * 3, 180, 'right');
 };
 
 Window_Status.prototype.drawEquipments = function(x, y) {

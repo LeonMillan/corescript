@@ -61,7 +61,7 @@ Game_Battler.prototype.requestMotion = function(motionType) {
 };
 
 Game_Battler.prototype.requestMotionRefresh = function() {
-    this._motionRefresh = true;
+    this._motionRefresh = false;
 };
 
 Game_Battler.prototype.select = function() {
@@ -181,14 +181,14 @@ Game_Battler.prototype.isStateAddable = function(stateId) {
 };
 
 Game_Battler.prototype.isStateRestrict = function(stateId) {
-    return $dataStates[stateId].removeByRestriction && this.isRestricted();
+    return $dataStates[stateId].remove_by_restriction && this.isRestricted();
 };
 
 Game_Battler.prototype.onRestrict = function() {
     Game_BattlerBase.prototype.onRestrict.call(this);
     this.clearActions();
     this.states().forEach(function(state) {
-        if (state.removeByRestriction) {
+        if (state.remove_by_restriction) {
             this.removeState(state.id);
         }
     }, this);
@@ -246,7 +246,7 @@ Game_Battler.prototype.removeBuff = function(paramId) {
 
 Game_Battler.prototype.removeBattleStates = function() {
     this.states().forEach(function(state) {
-        if (state.removeAtBattleEnd) {
+        if (state.remove_at_battle_end) {
             this.removeState(state.id);
         }
     }, this);
@@ -260,7 +260,7 @@ Game_Battler.prototype.removeAllBuffs = function() {
 
 Game_Battler.prototype.removeStatesAuto = function(timing) {
     this.states().forEach(function(state) {
-        if (this.isStateExpired(state.id) && state.autoRemovalTiming === timing) {
+        if (this.isStateExpired(state.id) && state.auto_removal_timing === timing) {
             this.removeState(state.id);
         }
     }, this);
@@ -276,7 +276,7 @@ Game_Battler.prototype.removeBuffsAuto = function() {
 
 Game_Battler.prototype.removeStatesByDamage = function() {
     this.states().forEach(function(state) {
-        if (state.removeByDamage && Math.randomInt(100) < state.chanceByDamage) {
+        if (state.remove_by_damage && Math.randomInt(100) < state.chance_by_damage) {
             this.removeState(state.id);
         }
     }, this);
@@ -395,7 +395,7 @@ Game_Battler.prototype.regenerateHp = function() {
 };
 
 Game_Battler.prototype.maxSlipDamage = function() {
-    return $dataSystem.optSlipDeath ? this.hp : Math.max(this.hp - 1, 0);
+    return $dataSystem.opt_slip_death ? this.hp : Math.max(this.hp - 1, 0);
 };
 
 Game_Battler.prototype.regenerateMp = function () {

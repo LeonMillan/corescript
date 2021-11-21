@@ -16,7 +16,7 @@ Window_SkillType.prototype.initialize = function(x, y) {
 };
 
 Window_SkillType.prototype.windowWidth = function() {
-    return 240;
+    return 160;
 };
 
 Window_SkillType.prototype.setActor = function(actor) {
@@ -38,7 +38,7 @@ Window_SkillType.prototype.makeCommandList = function() {
             return a - b;
         });
         skillTypes.forEach(function(stypeId) {
-            var name = $dataSystem.skillTypes[stypeId];
+            var name = $dataSystem.skill_types[stypeId];
             this.addCommand(name, 'skill', true, stypeId);
         }, this);
     }
@@ -58,7 +58,7 @@ Window_SkillType.prototype.setSkillWindow = function(skillWindow) {
 Window_SkillType.prototype.selectLast = function() {
     var skill = this._actor.lastMenuSkill();
     if (skill) {
-        this.selectExt(skill.stypeId);
+        this.selectExt(skill.stype_id);
     } else {
         this.select(0);
     }

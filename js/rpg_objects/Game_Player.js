@@ -13,7 +13,7 @@ Game_Player.prototype.constructor = Game_Player;
 
 Game_Player.prototype.initialize = function() {
     Game_Character.prototype.initialize.call(this);
-    this.setTransparent($dataSystem.optTransparent);
+    this.setTransparent($dataSystem.opt_transparent);
 };
 
 Game_Player.prototype.initMembers = function() {
@@ -197,7 +197,7 @@ Game_Player.prototype.makeEncounterTroopId = function() {
         for (var i = 0; i < encounterList.length; i++) {
             value -= encounterList[i].weight;
             if (value < 0) {
-                return encounterList[i].troopId;
+                return encounterList[i].troop_id;
             }
         }
     }
@@ -205,8 +205,8 @@ Game_Player.prototype.makeEncounterTroopId = function() {
 };
 
 Game_Player.prototype.meetsEncounterConditions = function(encounter) {
-    return (encounter.regionSet.length === 0 ||
-            encounter.regionSet.contains(this.regionId()));
+    return (encounter.region_set.length === 0 ||
+            encounter.region_set.contains(this.regionId()));
 };
 
 Game_Player.prototype.executeEncounter = function() {

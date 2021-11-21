@@ -20,7 +20,7 @@ Window_EquipStatus.prototype.initialize = function(x, y) {
 };
 
 Window_EquipStatus.prototype.windowWidth = function() {
-    return 312;
+    return 208;
 };
 
 Window_EquipStatus.prototype.windowHeight = function() {
@@ -58,32 +58,32 @@ Window_EquipStatus.prototype.setTempActor = function(tempActor) {
 Window_EquipStatus.prototype.drawItem = function(x, y, paramId) {
     this.drawParamName(x + this.textPadding(), y, paramId);
     if (this._actor) {
-        this.drawCurrentParam(x + 140, y, paramId);
+        this.drawCurrentParam(x + 94, y, paramId);
     }
-    this.drawRightArrow(x + 188, y);
+    this.drawRightArrow(x + 126, y);
     if (this._tempActor) {
-        this.drawNewParam(x + 222, y, paramId);
+        this.drawNewParam(x + 150, y, paramId);
     }
 };
 
 Window_EquipStatus.prototype.drawParamName = function(x, y, paramId) {
     this.changeTextColor(this.systemColor());
-    this.drawText(TextManager.param(paramId), x, y, 120);
+    this.drawText(TextManager.param(paramId), x, y, 80);
 };
 
 Window_EquipStatus.prototype.drawCurrentParam = function(x, y, paramId) {
     this.resetTextColor();
-    this.drawText(this._actor.param(paramId), x, y, 48, 'right');
+    this.drawText(this._actor.param(paramId), x, y, 32, 'right');
 };
 
 Window_EquipStatus.prototype.drawRightArrow = function(x, y) {
     this.changeTextColor(this.systemColor());
-    this.drawText('\u2192', x, y, 32, 'center');
+    this.drawText('\u2192', x, y, 22, 'center');
 };
 
 Window_EquipStatus.prototype.drawNewParam = function(x, y, paramId) {
     var newValue = this._tempActor.param(paramId);
     var diffvalue = newValue - this._actor.param(paramId);
     this.changeTextColor(this.paramchangeTextColor(diffvalue));
-    this.drawText(newValue, x, y, 48, 'right');
+    this.drawText(newValue, x, y, 32, 'right');
 };

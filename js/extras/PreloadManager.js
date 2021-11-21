@@ -327,7 +327,7 @@ var PreloadManager;
 
   PreloadManager.preloadAnimation = function (animationId) {
     var animation = $dataAnimations[animationId];
-    this.preloadImages('animation', [animation.animation1Name, animation.animation2Name]);
+    this.preloadImages('animation', [animation.animation1_name, animation.animation2_name]);
     for (var i = 0, max = animation.timings.length; i < max; i++) {
       var se = animation.timings[i].se;
       this.preloadSE(se);
@@ -345,11 +345,11 @@ var PreloadManager;
       // Map is loaded, preload resources now
       this.preloadBGM($dataMap.bgm);
       this.preloadBGS($dataMap.bgs);
-      this.preloadImages('battleback1', $dataMap.battleback1Name);
-      this.preloadImages('battleback2', $dataMap.battleback2Name);
-      this.preloadImages('parallax', $dataMap.parallaxName);
+      this.preloadImages('battleback1', $dataMap.battleback1_name);
+      this.preloadImages('battleback2', $dataMap.battleback2_name);
+      this.preloadImages('parallax', $dataMap.parallax_name);
       // Cycle events and load appropriate resources
-      for (var i = 0, max = $dataMap.events.length; i < max; i++) {
+      for (var i in $dataMap.events) {
         var event = $dataMap.events[i];
         if (!event) continue;
         for (var p = 0, pMax = event.pages.length; p < pMax; p++) {

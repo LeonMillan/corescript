@@ -101,9 +101,9 @@ class Window_HelpEx extends Window_Base {
     if (this._item.damage.type === 6) hitEffect = 'MP Drain';
 
     let element = 'None';
-    if (this._item.damage.elementId === -1) element = 'Normal attack';
-    if (this._item.damage.elementId > 0) {
-      element = $dataSystem.elements[this._item.damage.elementId];
+    if (this._item.damage.element_id === -1) element = 'Normal attack';
+    if (this._item.damage.element_id > 0) {
+      element = $dataSystem.elements[this._item.damage.element_id];
     }
 
     this.changeTextColor(this.systemColor());
@@ -140,14 +140,14 @@ class Window_HelpEx extends Window_Base {
 
     const list = [];
 
-    if (this._item.atypeId) {
-      list.push(this.makeText($dataSystem.armorTypes[this._item.atypeId], this.systemColor()));
+    if (this._item.atype_id) {
+      list.push(this.makeText($dataSystem.armor_types[this._item.atype_id], this.systemColor()));
     }
-    if (this._item.wtypeId) {
-      list.push(this.makeText($dataSystem.weaponTypes[this._item.wtypeId], this.systemColor()));
+    if (this._item.wtype_id) {
+      list.push(this.makeText($dataSystem.weapon_types[this._item.wtype_id], this.systemColor()));
     }
-    if (this._item.stypeId) {
-      list.push(this.makeText($dataSystem.skillTypes[this._item.stypeId], this.systemColor()));
+    if (this._item.stype_id) {
+      list.push(this.makeText($dataSystem.skill_types[this._item.stype_id], this.systemColor()));
     }
 
     if (this._item.price) list.push(this.makeText(`Price: ${this._item.price}`, this.textColor(21)));
@@ -169,12 +169,12 @@ class Window_HelpEx extends Window_Base {
       list.push(this.makeText(`Scope: ${scopeType}`, this.textColor(20)));
     }
     if (this._item.speed) list.push(this.makeText(`Speed: ${this._item.speed}`, this.textColor(20)));
-    if (this._item.successRate < 100) list.push(this.makeText(`Success: ${this._item.successRate}%`, this.textColor(20)));
+    if (this._item.success_rate < 100) list.push(this.makeText(`Success: ${this._item.success_rate}%`, this.textColor(20)));
   
-    if (this._item.hitType === 1) list.push(this.makeText(`Physical hit`, this.textColor(20)));
-    if (this._item.hitType === 2) list.push(this.makeText(`Magical hit`, this.textColor(20)));
+    if (this._item.hit_type === 1) list.push(this.makeText(`Physical hit`, this.textColor(20)));
+    if (this._item.hit_type === 2) list.push(this.makeText(`Magical hit`, this.textColor(20)));
 
-    if (this._item.tpGain > 0) list.push(this.makeText(`User +${this._item.tpGain} TP`, this.textColor(24)));
+    if (this._item.tp_gain > 0) list.push(this.makeText(`User +${this._item.tp_gain} TP`, this.textColor(24)));
 
     return list;
   }
@@ -183,7 +183,7 @@ class Window_HelpEx extends Window_Base {
     if (!this._item || !this._item.effects) return [];
     
     return this._item.effects.map((effect) => {
-      const { code, dataId, value1, value2 } = effect;
+      const { code, data_id: dataId, value1, value2 } = effect;
       let data;
       let icon;
 
@@ -203,13 +203,13 @@ class Window_HelpEx extends Window_Base {
 
         case 21:
           data = dataId > 0 ? $dataStates[dataId].name : 'Attack';
-          icon = dataId > 0 ? $dataStates[dataId].iconIndex : 0;
+          icon = dataId > 0 ? $dataStates[dataId].icon_index : 0;
           if (value1 < 1) return this.makeText(`${data} ${Math.round(value1 * 100)}%`, null, icon);
           return this.makeText(`${data}`, null, icon);
 
         case 22:
           data = dataId > 0 ? $dataStates[dataId].name : 'Attack';
-          icon = dataId > 0 ? $dataStates[dataId].iconIndex : 0;
+          icon = dataId > 0 ? $dataStates[dataId].icon_index : 0;
           if (value1 < 1) return this.makeText(`Heal ${data} ${Math.round(value1 * 100)}%`, null, icon);
           return this.makeText(`Heal ${data}`, null, icon);
 
@@ -242,7 +242,7 @@ class Window_HelpEx extends Window_Base {
 
         case 43:
           data = $dataSkills[dataId];
-          return this.makeText(`+ ${data.name}`, null, data.iconIndex);
+          return this.makeText(`+ ${data.name}`, null, data.icon_index);
 
         case 44:
           return this.makeText(`Special`);
@@ -254,10 +254,10 @@ class Window_HelpEx extends Window_Base {
   }
 
   getTraitsList() {
-    if (!this._item || !this._item.traits) return [];
+    if (!this._item || !this._item.features) return [];
 
-    return this._item.traits.map((trait) => {
-      const { code, dataId, value } = trait;
+    return this._item.features.map((trait) => {
+      const { code, data_id: dataId, value } = trait;
       const percentVal = Math.round(value * 100);
       const sign = (value < 0 ? '' : '+');
       let data;
@@ -273,11 +273,11 @@ class Window_HelpEx extends Window_Base {
 
         case 13:
           data = $dataStates[dataId];
-          return this.makeText(`+${data.name} Rate × ${percentVal}%`, null, data.iconIndex);
+          return this.makeText(`+${data.name} Rate × ${percentVal}%`, null, data.icon_index);
 
         case 14:
           data = $dataStates[dataId];
-          return this.makeText(`Resist ${data.name}`, null, data.iconIndex);
+          return this.makeText(`Resist ${data.name}`, null, data.icon_index);
 
         case 21:
           data = TextManager.param(dataId);
@@ -319,7 +319,7 @@ class Window_HelpEx extends Window_Base {
 
         case 32:
           data = $dataStates[dataId];
-          return this.makeText(`${data.name} on hit ${sign}${percentVal}%`, null, data.iconIndex);
+          return this.makeText(`${data.name} on hit ${sign}${percentVal}%`, null, data.icon_index);
 
         case 33:
           return this.makeText(`Attack speed ${sign}${value}`);
@@ -328,27 +328,27 @@ class Window_HelpEx extends Window_Base {
           return this.makeText(`Attack ${value} times`);
 
         case 41:
-          data = $dataSystem.skillTypes[dataId];
+          data = $dataSystem.skill_types[dataId];
           return this.makeText(`Use ${data}`);
 
         case 42:
-          data = $dataSystem.skillTypes[dataId];
+          data = $dataSystem.skill_types[dataId];
           return this.makeText(`Seal ${data}`);
 
         case 43:
           data = $dataSkills[dataId];
-          return this.makeText(`+ ${data.name}`, null, data.iconIndex);
+          return this.makeText(`+ ${data.name}`, null, data.icon_index);
 
         case 44:
           data = $dataSkills[dataId];
-          return this.makeText(`Seal ${data.name}`, null, data.iconIndex);
+          return this.makeText(`Seal ${data.name}`, null, data.icon_index);
 
         case 51:
-          data = $dataSystem.weaponTypes[dataId];
+          data = $dataSystem.weapon_types[dataId];
           return this.makeText(`Use ${data}`);
 
         case 52:
-          data = $dataSystem.armorTypes[dataId];
+          data = $dataSystem.armor_types[dataId];
           return this.makeText(`Use ${data}`);
 
         case 53:

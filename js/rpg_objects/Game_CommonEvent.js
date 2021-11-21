@@ -33,7 +33,7 @@ Game_CommonEvent.prototype.refresh = function() {
 
 Game_CommonEvent.prototype.isActive = function() {
     var event = this.event();
-    return event.trigger === 2 && $gameSwitches.value(event.switchId);
+    return event.trigger === 2 && $gameSwitches.value(event.switch_id);
 };
 
 Game_CommonEvent.prototype.update = function() {

@@ -35,14 +35,14 @@ Window_Options.prototype.makeCommandList = function() {
 
 Window_Options.prototype.getOptionList = function () {
     return [
-        { symbol: 'alwaysDash',         type: 'bool',   label: TextManager.alwaysDash },
+        { symbol: 'alwaysDash',         type: 'bool',   label: 'Always dash' },
         { symbol: 'dashSpeed',          type: 'list',   label: 'Dash speed', list: [
             { value: 1.0, label: 'Normal' },
             { value: 1.5, label: 'Fast' },
             { value: 2.0, label: 'Faster' },
             { value: 2.5, label: 'Fastest' },
         ] },
-        { symbol: 'commandRemember',    type: 'bool',   label: TextManager.commandRemember },
+        { symbol: 'commandRemember',    type: 'bool',   label: 'Remember command' },
         { symbol: 'encounterRate',      type: 'list',   label: 'Encounter rate', list: [
             { value: 5.0, label: 'Lowest' },
             { value: 3.0, label: 'Lower' },
@@ -72,10 +72,10 @@ Window_Options.prototype.getOptionList = function () {
             { value: 9, label: 'Disabled' },
         ] },
         { symbol: 'eventIcons',         type: 'bool',   label: 'Event icons' },
-        { symbol: 'bgmVolume',          type: 'volume', label: TextManager.bgmVolume },
-        { symbol: 'bgsVolume',          type: 'volume', label: TextManager.bgsVolume },
-        { symbol: 'meVolume',           type: 'volume', label: TextManager.meVolume },
-        { symbol: 'seVolume',           type: 'volume', label: TextManager.seVolume },
+        { symbol: 'bgmVolume',          type: 'volume', label: 'BGM Volume' },
+        { symbol: 'bgsVolume',          type: 'volume', label: 'BGS Volume' },
+        { symbol: 'meVolume',           type: 'volume', label: 'ME Volume' },
+        { symbol: 'seVolume',           type: 'volume', label: 'SE Volume' },
     ];
 };
 

@@ -1,6 +1,5 @@
 [
   "js/extras/ActionIndicators.js",
   "js/extras/NewItemIndication.js",
-  "js/extras/Minimap.js",
-  "js/extras/CheatMenu.js"
+  "js/extras/Minimap.js"
 ]

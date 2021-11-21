@@ -21,7 +21,7 @@ Window_BattleStatus.prototype.initialize = function() {
 };
 
 Window_BattleStatus.prototype.windowWidth = function() {
-    return Graphics.boxWidth - 192;
+    return Graphics.boxWidth - 128;
 };
 
 Window_BattleStatus.prototype.windowHeight = function() {
@@ -49,7 +49,7 @@ Window_BattleStatus.prototype.drawItem = function(index) {
 
 Window_BattleStatus.prototype.basicAreaRect = function(index) {
     var rect = this.itemRectForText(index);
-    rect.width -= this.gaugeAreaWidth() + 15;
+    rect.width -= this.gaugeAreaWidth() + 10;
     return rect;
 };
 
@@ -61,16 +61,16 @@ Window_BattleStatus.prototype.gaugeAreaRect = function(index) {
 };
 
 Window_BattleStatus.prototype.gaugeAreaWidth = function() {
-    return 330;
+    return 220;
 };
 
 Window_BattleStatus.prototype.drawBasicArea = function(rect, actor) {
-    this.drawActorName(actor, rect.x + 0, rect.y, 150);
-    this.drawActorIcons(actor, rect.x + 156, rect.y, rect.width - 156);
+    this.drawActorName(actor, rect.x + 0, rect.y, 100);
+    this.drawActorIcons(actor, rect.x + 104, rect.y, rect.width - 104);
 };
 
 Window_BattleStatus.prototype.drawGaugeArea = function(rect, actor) {
-    if ($dataSystem.optDisplayTp) {
+    if ($dataSystem.opt_display_tp) {
         this.drawGaugeAreaWithTp(rect, actor);
     } else {
         this.drawGaugeAreaWithoutTp(rect, actor);
@@ -78,12 +78,12 @@ Window_BattleStatus.prototype.drawGaugeArea = function(rect, actor) {
 };
 
 Window_BattleStatus.prototype.drawGaugeAreaWithTp = function(rect, actor) {
-    this.drawActorHp(actor, rect.x + 0, rect.y, 108);
-    this.drawActorMp(actor, rect.x + 123, rect.y, 96);
-    this.drawActorTp(actor, rect.x + 234, rect.y, 96);
+    this.drawActorHp(actor, rect.x + 0, rect.y, 72);
+    this.drawActorMp(actor, rect.x + 82, rect.y, 64);
+    this.drawActorTp(actor, rect.x + 156, rect.y, 64);
 };
 
 Window_BattleStatus.prototype.drawGaugeAreaWithoutTp = function(rect, actor) {
-    this.drawActorHp(actor, rect.x + 0, rect.y, 201);
-    this.drawActorMp(actor, rect.x + 216,  rect.y, 114);
+    this.drawActorHp(actor, rect.x + 0, rect.y, 134);
+    this.drawActorMp(actor, rect.x + 144, rect.y, 76);
 };

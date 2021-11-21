@@ -23,8 +23,8 @@ Graphics._videoVolume = 1;
  *                 'canvas', 'webgl', or 'auto'.
  */
 Graphics.initialize = function(width, height, type) {
-    this._width = width || 800;
-    this._height = height || 600;
+    this._width = 544;
+    this._height = 416;
     this._rendererType = type || 'auto';
     this._boxWidth = this._width;
     this._boxHeight = this._height;
@@ -269,7 +269,7 @@ Graphics.startLoading = function() {
 Graphics._setupProgress = function(){
     this._progressElement = document.createElement('div');
     this._progressElement.id = 'loading-progress';
-    this._progressElement.width = 600;
+    this._progressElement.width = 400;
     this._progressElement.height = 300;
     this._progressElement.style.visibility = 'hidden';
 

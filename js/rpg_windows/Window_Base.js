@@ -23,14 +23,14 @@ Window_Base.prototype.initialize = function(x, y, width, height) {
     this._dimmerSprite = null;
 };
 
-Window_Base._iconWidth  = 32;
-Window_Base._iconHeight = 32;
-Window_Base._faceWidth  = 144;
-Window_Base._faceHeight = 144;
+Window_Base._iconWidth  = 24;
+Window_Base._iconHeight = 24;
+Window_Base._faceWidth  = 96;
+Window_Base._faceHeight = 96;
 Window_Base._textColorCache = {};
 
 Window_Base.prototype.lineHeight = function() {
-    return 36;
+    return 24;
 };
 
 Window_Base.prototype.standardFontFace = function() {
@@ -44,15 +44,15 @@ Window_Base.prototype.standardFontFace = function() {
 };
 
 Window_Base.prototype.standardFontSize = function() {
-    return 28;
-};
-
-Window_Base.prototype.standardPadding = function() {
     return 18;
 };
 
+Window_Base.prototype.standardPadding = function() {
+    return 12;
+};
+
 Window_Base.prototype.textPadding = function() {
-    return 6;
+    return 4;
 };
 
 Window_Base.prototype.standardBackOpacity = function() {
@@ -171,8 +171,8 @@ Window_Base.prototype.textColor = function(n) {
     if (Window_Base._textColorCache[n] !== undefined) {
         return Window_Base._textColorCache[n];
     } 
-    var px = 96 + (n % 8) * 12 + 6;
-    var py = 144 + Math.floor(n / 8) * 12 + 6;
+    var px = 64 + (n % 8) * 8 + 6;
+    var py = 96 + Math.floor(n / 8) * 8 + 6;
     const color = this.windowskin.getPixel(px, py);
     Window_Base._textColorCache[n] = color;
     return color;
@@ -433,7 +433,7 @@ Window_Base.prototype.calcTextHeight = function(textState, all) {
                 break;
             }
         }
-        textHeight += maxFontSize + 8;
+        textHeight += maxFontSize + 6;
     }
 
     this.contents.fontSize = lastFontSize;
@@ -509,32 +509,32 @@ Window_Base.prototype.drawActorFace = function(actor, x, y, width, height) {
 };
 
 Window_Base.prototype.drawActorName = function(actor, x, y, width) {
-    width = width || 168;
+    width = width || 112;
     this.changeTextColor(this.hpColor(actor));
     this.drawText(actor.name(), x, y, width);
 };
 
 Window_Base.prototype.drawActorClass = function(actor, x, y, width) {
-    width = width || 168;
+    width = width || 112;
     this.resetTextColor();
     this.drawText(actor.currentClass().name, x, y, width);
 };
 
 Window_Base.prototype.drawActorNickname = function(actor, x, y, width) {
-    width = width || 270;
+    width = width || 180;
     this.resetTextColor();
     this.drawText(actor.nickname(), x, y, width);
 };
 
 Window_Base.prototype.drawActorLevel = function(actor, x, y) {
     this.changeTextColor(this.systemColor());
-    this.drawText(TextManager.levelA, x, y, 48);
+    this.drawText(TextManager.levelA, x, y, 32);
     this.resetTextColor();
-    this.drawText(actor.level, x + 84, y, 36, 'right');
+    this.drawText(actor.level, x + 32, y, 32, 'right');
 };
 
 Window_Base.prototype.drawActorIcons = function(actor, x, y, width) {
-    width = width || 144;
+    width = width || 96;
     var icons = actor.allIcons().slice(0, Math.floor(width / Window_Base._iconWidth));
     for (var i = 0; i < icons.length; i++) {
         this.drawIcon(icons[i], x + Window_Base._iconWidth * i, y + 2);
@@ -569,7 +569,7 @@ Window_Base.prototype.drawCurrentAndMax = function(current, max, x, y,
 };
 
 Window_Base.prototype.drawActorHp = function(actor, x, y, width) {
-    width = width || 186;
+    width = width || 124;
     var color1 = this.hpGaugeColor1();
     var color2 = this.hpGaugeColor2();
     this.drawGauge(x, y, width, actor.hpRate(), color1, color2);
@@ -580,7 +580,7 @@ Window_Base.prototype.drawActorHp = function(actor, x, y, width) {
 };
 
 Window_Base.prototype.drawActorMp = function(actor, x, y, width) {
-    width = width || 186;
+    width = width || 124;
     var color1 = this.mpGaugeColor1();
     var color2 = this.mpGaugeColor2();
     this.drawGauge(x, y, width, actor.mpRate(), color1, color2);
@@ -603,8 +603,8 @@ Window_Base.prototype.drawActorTp = function(actor, x, y, width) {
 
 Window_Base.prototype.drawActorSimpleStatus = function(actor, x, y, width) {
     var lineHeight = this.lineHeight();
-    var x2 = x + 180;
-    var width2 = Math.min(200, width - 180 - this.textPadding());
+    var x2 = x + 96;
+    var width2 = Math.min(200, width - 96 - this.textPadding());
     this.drawActorName(actor, x, y);
     this.drawActorLevel(actor, x, y + lineHeight * 1);
     this.drawActorIcons(actor, x, y + lineHeight * 2);
@@ -614,11 +614,11 @@ Window_Base.prototype.drawActorSimpleStatus = function(actor, x, y, width) {
 };
 
 Window_Base.prototype.drawItemName = function(item, x, y, width) {
-    width = width || 312;
+    width = width || 172;
     if (item) {
         var iconBoxWidth = Window_Base._iconWidth + 4;
         this.resetTextColor();
-        this.drawIcon(item.iconIndex, x + 2, y + 2);
+        this.drawIcon(item.icon_index, x, y);
         this.drawText(item.name, x + iconBoxWidth, y, width - iconBoxWidth);
     }
 };

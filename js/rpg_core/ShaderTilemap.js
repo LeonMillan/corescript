@@ -187,8 +187,7 @@ ShaderTilemap.prototype._paintTiles = function(startX, startY, x, y) {
     var tileId0 = this._readMapData(mx, my, 0);
     var tileId1 = this._readMapData(mx, my, 1);
     var tileId2 = this._readMapData(mx, my, 2);
-    var tileId3 = this._readMapData(mx, my, 3);
-    var shadowBits = this._readMapData(mx, my, 4);
+    var shadowBits = this._readMapData(mx, my, 3);
     var upperTileId1 = this._readMapData(mx, my - 1, 1);
     var lowerLayer = this.lowerLayer.children[0];
     var upperLayer = this.upperLayer.children[0];
@@ -213,17 +212,11 @@ ShaderTilemap.prototype._paintTiles = function(startX, startY, x, y) {
 
     if (this._isOverpassPosition(mx, my)) {
         this._drawTile(upperLayer, tileId2, dx, dy);
-        this._drawTile(upperLayer, tileId3, dx, dy);
     } else {
         if (this._isHigherTile(tileId2)) {
             this._drawTile(upperLayer, tileId2, dx, dy);
         } else {
             this._drawTile(lowerLayer, tileId2, dx, dy);
-        }
-        if (this._isHigherTile(tileId3)) {
-            this._drawTile(upperLayer, tileId3, dx, dy);
-        } else {
-            this._drawTile(lowerLayer, tileId3, dx, dy);
         }
     }
 };

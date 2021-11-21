@@ -157,7 +157,7 @@ Bitmap.prototype.initialize = function(width, height) {
      * @property fontSize
      * @type Number
      */
-    this.fontSize = 28;
+    this.fontSize = 20;
 
     /**
      * Whether the font is italic.
@@ -189,7 +189,7 @@ Bitmap.prototype.initialize = function(width, height) {
      * @property outlineWidth
      * @type Number
      */
-    this.outlineWidth = 4;
+    this.outlineWidth = 3;
 };
 
 /**
@@ -1004,10 +1004,10 @@ Bitmap.prototype.checkDirty = function() {
     if (this._dirty) {
         this._baseTexture.update();
         // Optimization (?)
-        // var baseTexture = this._baseTexture;
-        // setTimeout(function() {
-        //     baseTexture.update();
-        // }, 0);
+        var baseTexture = this._baseTexture;
+        setTimeout(function() {
+            baseTexture.update();
+        }, 0);
         this._dirty = false;
     }
 };
@@ -1065,5 +1065,5 @@ Bitmap.prototype.startRequest = function(){
     }
 };
 
-Bitmap.minFontSize = 21;
+Bitmap.minFontSize = 36;
 Bitmap.drawSmallTextBitmap = new Bitmap(1632, Bitmap.minFontSize);
