@@ -66,6 +66,10 @@ Window_Command.prototype.isCommandEnabled = function(index) {
     return this._list[index].enabled;
 };
 
+Window_Command.prototype.commandExt = function (index) {
+    return this._list[index].ext;
+};
+
 Window_Command.prototype.currentData = function() {
     return this.index() >= 0 ? this._list[this.index()] : null;
 };

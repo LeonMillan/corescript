@@ -5,6 +5,7 @@
   "js/rpg_windows/Window_Command.js",
   "js/rpg_windows/Window_HorzCommand.js",
   "js/rpg_windows/Window_Help.js",
+  "js/rpg_windows/Window_HelpEx.js",
   "js/rpg_windows/Window_Gold.js",
   "js/rpg_windows/Window_MenuCommand.js",
   "js/rpg_windows/Window_MenuStatus.js",

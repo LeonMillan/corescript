@@ -168,6 +168,23 @@ Sprite.prototype.setFrame = function(x, y, width, height) {
     }
 };
 
+Sprite.prototype.setFrameCellXY = function (cellWidth, cellHeight, x, y) {
+    this.setFrame(x * cellWidth, y * cellHeight, cellWidth, cellHeight);
+};
+
+Sprite.prototype.setFrameCellIndex = function (cellWidth, cellHeight, cellByRow, index) {
+    const x = index % cellByRow;
+    const y = Math.floor(index / cellByRow);
+    this.setFrame(x * cellWidth, y * cellHeight, cellWidth, cellHeight);
+};
+
+Sprite.prototype.setFrameSlice = function (xSlices, ySlices, x, y) {
+    if (!this._bitmap) return;
+    const cellWidth = this._bitmap.width / xSlices;
+    const cellHeight = this._bitmap.height / ySlices;
+    this.setFrameCellXY(cellWidth, cellHeight, x, y);
+};
+
 /**
  * Gets the blend color for the sprite.
  *

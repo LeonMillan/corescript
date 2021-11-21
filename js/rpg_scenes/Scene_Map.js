@@ -71,7 +71,9 @@ Scene_Map.prototype.updateMainMultiply = function() {
         if (!this.isMapTouchOk()) {
             this.updateDestination();
         }
-        this.updateMain();
+        for (let count = 0; count < ConfigManager.fastforwardSpeed; count++) {
+            this.updateMain();
+        }
     }
 };
 
@@ -193,6 +195,9 @@ Scene_Map.prototype.updateScene = function() {
     if (!SceneManager.isSceneChanging()) {
         this.updateCallDebug();
     }
+    if (!SceneManager.isSceneChanging()) {
+        this.updateCallQuickSave();
+    }
 };
 
 Scene_Map.prototype.createDisplayObjects = function() {
@@ -280,6 +285,14 @@ Scene_Map.prototype.updateCallDebug = function() {
 
 Scene_Map.prototype.isDebugCalled = function() {
     return Input.isTriggered('debug') && $gameTemp.isPlaytest();
+};
+
+Scene_Map.prototype.updateCallQuickSave = function () {
+    if (Input.isTriggered('save')) {
+        SceneManager.push(Scene_Save);
+    } else if (Input.isTriggered('load')) {
+        SceneManager.push(Scene_Load);
+    }
 };
 
 Scene_Map.prototype.fadeInForTransfer = function() {

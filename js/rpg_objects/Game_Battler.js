@@ -372,7 +372,8 @@ Game_Battler.prototype.gainSilentTp = function(value) {
 };
 
 Game_Battler.prototype.initTp = function() {
-    this.setTp(Math.randomInt(25));
+    const bonus = this.level ? Math.ceil(this.level / 4) : 0;
+    this.setTp(10 + bonus + Math.randomInt(20));
 };
 
 Game_Battler.prototype.clearTp = function() {
@@ -385,6 +386,7 @@ Game_Battler.prototype.chargeTpByDamage = function(damageRate) {
 };
 
 Game_Battler.prototype.regenerateHp = function() {
+    if (this.hp >= this.mhp) return;
     var value = Math.floor(this.mhp * this.hrg);
     value = Math.max(value, -this.maxSlipDamage());
     if (value !== 0) {
@@ -396,7 +398,8 @@ Game_Battler.prototype.maxSlipDamage = function() {
     return $dataSystem.optSlipDeath ? this.hp : Math.max(this.hp - 1, 0);
 };
 
-Game_Battler.prototype.regenerateMp = function() {
+Game_Battler.prototype.regenerateMp = function () {
+    if (this.mp >= this.mmp) return;
     var value = Math.floor(this.mmp * this.mrg);
     if (value !== 0) {
         this.gainMp(value);
@@ -404,6 +407,7 @@ Game_Battler.prototype.regenerateMp = function() {
 };
 
 Game_Battler.prototype.regenerateTp = function() {
+    if (this.tp >= this.maxTp()) return;
     var value = Math.floor(100 * this.trg);
     this.gainSilentTp(value);
 };
@@ -412,7 +416,9 @@ Game_Battler.prototype.regenerateAll = function() {
     if (this.isAlive()) {
         this.regenerateHp();
         this.regenerateMp();
-        this.regenerateTp();
+        if ($gameParty.inBattle() || this.isPreserveTp()) {
+            this.regenerateTp();
+        }
     }
 };
 

@@ -27,6 +27,7 @@ Window_Base._iconWidth  = 32;
 Window_Base._iconHeight = 32;
 Window_Base._faceWidth  = 144;
 Window_Base._faceHeight = 144;
+Window_Base._textColorCache = {};
 
 Window_Base.prototype.lineHeight = function() {
     return 36;
@@ -167,9 +168,14 @@ Window_Base.prototype.deactivate = function() {
 };
 
 Window_Base.prototype.textColor = function(n) {
+    if (Window_Base._textColorCache[n] !== undefined) {
+        return Window_Base._textColorCache[n];
+    } 
     var px = 96 + (n % 8) * 12 + 6;
     var py = 144 + Math.floor(n / 8) * 12 + 6;
-    return this.windowskin.getPixel(px, py);
+    const color = this.windowskin.getPixel(px, py);
+    Window_Base._textColorCache[n] = color;
+    return color;
 };
 
 Window_Base.prototype.normalColor = function() {
@@ -258,13 +264,14 @@ Window_Base.prototype.textWidth = function(text) {
 
 Window_Base.prototype.drawTextEx = function(text, x, y) {
     if (text) {
-        var textState = { index: 0, x: x, y: y, left: x };
+        var textState = { index: 0, x: x, y: y, left: x, buffer: '' };
         textState.text = this.convertEscapeCharacters(text);
         textState.height = this.calcTextHeight(textState, false);
         this.resetFontSettings();
         while (textState.index < textState.text.length) {
             this.processCharacter(textState);
         }
+        if (textState.buffer) this.processBuffer(textState);
         return textState.x - x;
     } else {
         return 0;
@@ -303,12 +310,15 @@ Window_Base.prototype.partyMemberName = function(n) {
 Window_Base.prototype.processCharacter = function(textState) {
     switch (textState.text[textState.index]) {
     case '\n':
+        this.processBuffer(textState);
         this.processNewLine(textState);
         break;
     case '\f':
+        this.processBuffer(textState);
         this.processNewPage(textState);
         break;
     case '\x1b':
+        this.processBuffer(textState);
         this.processEscapeCharacter(this.obtainEscapeCode(textState), textState);
         break;
     default:
@@ -319,9 +329,16 @@ Window_Base.prototype.processCharacter = function(textState) {
 
 Window_Base.prototype.processNormalCharacter = function(textState) {
     var c = textState.text[textState.index++];
-    var w = this.textWidth(c);
-    this.contents.drawText(c, textState.x, textState.y, w * 2, textState.height);
+    textState.buffer += c;
+};
+
+Window_Base.prototype.processBuffer = function (textState) {
+    if (!textState.buffer) return;
+    var text = textState.buffer;
+    var w = this.textWidth(text);
+    this.contents.drawText(text, textState.x, textState.y, w * 2, textState.height);
     textState.x += w;
+    textState.buffer = '';
 };
 
 Window_Base.prototype.processNewLine = function(textState) {
@@ -533,11 +550,18 @@ Window_Base.prototype.drawCurrentAndMax = function(current, max, x, y,
     var x2 = x1 - slashWidth;
     var x3 = x2 - valueWidth;
     if (x3 >= x + labelWidth) {
-        this.changeTextColor(color1);
-        this.drawText(current, x3, y, valueWidth, 'right');
-        this.changeTextColor(color2);
-        this.drawText('/', x2, y, slashWidth, 'right');
-        this.drawText(max, x1, y, valueWidth, 'right');
+        // Optimization for best case scenario
+        if (color1 === color2) {
+            const fullText = String(current).padStart(4) + '/' + String(max).padStart(4);
+            this.changeTextColor(color1);
+            this.drawText(fullText, x, y, width, 'right');
+        } else {
+            this.changeTextColor(color1);
+            this.drawText(current, x3, y, valueWidth, 'right');
+            this.changeTextColor(color2);
+            this.drawText('/', x2, y, slashWidth, 'right');
+            this.drawText(max, x1, y, valueWidth, 'right');
+        }
     } else {
         this.changeTextColor(color1);
         this.drawText(current, x1, y, valueWidth, 'right');

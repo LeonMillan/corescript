@@ -10,7 +10,9 @@ Decrypter._headerlength = 16;
 Decrypter._xhrOk = 400;
 Decrypter._encryptionKey = "";
 Decrypter._ignoreList = [
-    "img/system/Window.png"
+    "img/system/Window.png",
+    "img/system/NewItem.png",
+    "img/system/ActionIcon.png",
 ];
 Decrypter.SIGNATURE = "5250474d56000000";
 Decrypter.VER = "000301";
@@ -24,29 +26,33 @@ Decrypter.checkImgIgnore = function(url){
 };
 
 Decrypter.decryptImg = function(url, bitmap) {
-    url = this.extToEncryptExt(url);
+    return new Promise((resolve, reject) => {
+        url = this.extToEncryptExt(url);
 
-    var requestFile = new XMLHttpRequest();
-    requestFile.open("GET", url);
-    requestFile.responseType = "arraybuffer";
-    requestFile.send();
+        var requestFile = new XMLHttpRequest();
+        requestFile.open("GET", url);
+        requestFile.responseType = "arraybuffer";
+        requestFile.send();
 
-    requestFile.onload = function () {
-        if(this.status < Decrypter._xhrOk) {
-            var arrayBuffer = Decrypter.decryptArrayBuffer(requestFile.response);
-            bitmap._image.src = Decrypter.createBlobUrl(arrayBuffer);
-            bitmap._image.addEventListener('load', bitmap._loadListener = Bitmap.prototype._onLoad.bind(bitmap));
-            bitmap._image.addEventListener('error', bitmap._errorListener = bitmap._loader || Bitmap.prototype._onError.bind(bitmap));
-        }
-    };
+        requestFile.onload = function () {
+            if (this.status < Decrypter._xhrOk) {
+                var arrayBuffer = Decrypter.decryptArrayBuffer(requestFile.response);
+                bitmap._image.src = Decrypter.createBlobUrl(arrayBuffer);
+                bitmap._image.addEventListener('load', bitmap._loadListener = Bitmap.prototype._onLoad.bind(bitmap));
+                bitmap._image.addEventListener('error', bitmap._errorListener = bitmap._loader || Bitmap.prototype._onError.bind(bitmap));
+                resolve(bitmap);
+            }
+        };
 
-    requestFile.onerror = function () {
-        if (bitmap._loader) {
-            bitmap._loader();
-        } else {
-            bitmap._onError();
-        }
-    };
+        requestFile.onerror = function () {
+            if (bitmap._loader) {
+                bitmap._loader();
+            } else {
+                bitmap._onError();
+            }
+            reject();
+        };
+    });
 };
 
 Decrypter.decryptHTML5Audio = function(url, bgm, pos) {

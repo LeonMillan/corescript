@@ -69,7 +69,15 @@ Input.keyMapper = {
     100: 'left',    // numpad 4
     102: 'right',   // numpad 6
     104: 'up',      // numpad 8
-    120: 'debug'    // F9
+    120: 'debug',   // F9
+
+    35: 'end',          // end
+    36: 'home',         // home
+    77: 'map',          // M
+    187: 'save',        // +
+    189: 'load',        // -
+    190: 'copytext',    // .
+    188: 'copyitem',    // ,
 };
 
 /**
@@ -268,8 +276,8 @@ Input._wrapNwjsAlert = function() {
  * @private
  */
 Input._setupEventHandlers = function() {
-    document.addEventListener('keydown', this._onKeyDown.bind(this));
-    document.addEventListener('keyup', this._onKeyUp.bind(this));
+    window.addEventListener('keydown', this._onKeyDown.bind(this));
+    window.addEventListener('keyup', this._onKeyUp.bind(this));
     window.addEventListener('blur', this._onLostFocus.bind(this));
 };
 

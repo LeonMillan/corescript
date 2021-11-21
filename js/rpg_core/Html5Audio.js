@@ -349,10 +349,10 @@ Html5Audio.seek = function () {
  *
  * @static
  * @method addLoadListener
- * @param {Function} listner The callback function
+ * @param {Function} listener The callback function
  */
-Html5Audio.addLoadListener = function (listner) {
-    this._loadListeners.push(listner);
+Html5Audio.addLoadListener = function (listener) {
+    this._loadListeners.push(listener);
 };
 
 /**

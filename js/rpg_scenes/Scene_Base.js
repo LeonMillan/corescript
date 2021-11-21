@@ -309,7 +309,7 @@ Scene_Base.prototype.fadeOutAll = function() {
  * @return {Number} Return the fade speed
  */
 Scene_Base.prototype.fadeSpeed = function() {
-    return 24;
+    return ConfigManager.transitionTime;
 };
 
 /**

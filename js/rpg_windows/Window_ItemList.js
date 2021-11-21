@@ -101,8 +101,9 @@ Window_ItemList.prototype.numberWidth = function() {
 
 Window_ItemList.prototype.drawItemNumber = function(item, x, y, width) {
     if (this.needsNumber()) {
-        this.drawText(':', x, y, width - this.textWidth('00'), 'right');
-        this.drawText($gameParty.numItems(item), x, y, width, 'right');
+        const itemNum = $gameParty.numItems(item);
+        const text = (itemNum < 100) ? ':' + itemNum : itemNum;
+        this.drawText(text, x, y, width, 'right');
     }
 };
 

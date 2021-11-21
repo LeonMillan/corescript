@@ -23,7 +23,8 @@ Scene_Menu.prototype.create = function() {
 
 Scene_Menu.prototype.start = function() {
     Scene_MenuBase.prototype.start.call(this);
-    this._statusWindow.refresh();
+    // Removed for performance optimization
+    // this._statusWindow.refresh();
 };
 
 Scene_Menu.prototype.createCommandWindow = function() {

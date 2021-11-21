@@ -549,7 +549,7 @@ Game_Action.prototype.applyVariance = function(damage, variance) {
 };
 
 Game_Action.prototype.applyGuard = function(damage, target) {
-    return damage / (damage > 0 && target.isGuard() ? 2 * target.grd : 1);
+    return damage / (damage > 0 && target.isGuard() ? 3 * target.grd : 1);
 };
 
 Game_Action.prototype.executeDamage = function(target, value) {

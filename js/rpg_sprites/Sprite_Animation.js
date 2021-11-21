@@ -60,11 +60,12 @@ Sprite_Animation.prototype.remove = function() {
 };
 
 Sprite_Animation.prototype.setupRate = function() {
-    this._rate = 4;
+    this._rate = 4 - Math.min(ConfigManager.battleSpeed, 3);
 };
 
 Sprite_Animation.prototype.setupDuration = function() {
     this._duration = this._animation.frames.length * this._rate + 1;
+    if (ConfigManager.battleSpeed === 9) this._duration = 1;
 };
 
 Sprite_Animation.prototype.update = function() {

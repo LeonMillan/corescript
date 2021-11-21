@@ -29,20 +29,54 @@ Window_Options.prototype.updatePlacement = function() {
 };
 
 Window_Options.prototype.makeCommandList = function() {
-    this.addGeneralOptions();
-    this.addVolumeOptions();
+    const options = this.getOptionList();
+    options.forEach((option) => this.addCommand(option.label, option.symbol, true, option));
 };
 
-Window_Options.prototype.addGeneralOptions = function() {
-    this.addCommand(TextManager.alwaysDash, 'alwaysDash');
-    this.addCommand(TextManager.commandRemember, 'commandRemember');
-};
-
-Window_Options.prototype.addVolumeOptions = function() {
-    this.addCommand(TextManager.bgmVolume, 'bgmVolume');
-    this.addCommand(TextManager.bgsVolume, 'bgsVolume');
-    this.addCommand(TextManager.meVolume, 'meVolume');
-    this.addCommand(TextManager.seVolume, 'seVolume');
+Window_Options.prototype.getOptionList = function () {
+    return [
+        { symbol: 'alwaysDash',         type: 'bool',   label: TextManager.alwaysDash },
+        { symbol: 'dashSpeed',          type: 'list',   label: 'Dash speed', list: [
+            { value: 1.0, label: 'Normal' },
+            { value: 1.5, label: 'Fast' },
+            { value: 2.0, label: 'Faster' },
+            { value: 2.5, label: 'Fastest' },
+        ] },
+        { symbol: 'commandRemember',    type: 'bool',   label: TextManager.commandRemember },
+        { symbol: 'encounterRate',      type: 'list',   label: 'Encounter rate', list: [
+            { value: 5.0, label: 'Lowest' },
+            { value: 3.0, label: 'Lower' },
+            { value: 2.0, label: 'Low' },
+            { value: 1.0, label: 'Normal' },
+            { value: 0.5, label: 'High' },
+            { value: 0.2, label: 'Higher' },
+            { value: 0.1, label: 'Highest' },
+        ] },
+        { symbol: 'transitionTime',     type: 'list',   label: 'Transition time', list: [
+            { value: 24, label: 'Normal' },
+            { value: 12, label: 'Fast' },
+            { value: 8,  label: 'Fastest' },
+        ] },
+        { symbol: 'fastforwardSpeed',   type: 'list',   label: 'Fastforward speed', list: [
+            { value: 1, label: '2x' },
+            { value: 2, label: '3x' },
+            { value: 3, label: '4x' },
+            { value: 5, label: '6x' },
+            { value: 7, label: '8x' },
+        ] },
+        { symbol: 'battleSpeed',        type: 'list',   label: 'Battle animations', list: [
+            { value: 0, label: 'Normal' },
+            { value: 1, label: 'Fast' },
+            { value: 2, label: 'Faster' },
+            { value: 3, label: 'Fastest' },
+            { value: 9, label: 'Disabled' },
+        ] },
+        { symbol: 'eventIcons',         type: 'bool',   label: 'Event icons' },
+        { symbol: 'bgmVolume',          type: 'volume', label: TextManager.bgmVolume },
+        { symbol: 'bgsVolume',          type: 'volume', label: TextManager.bgsVolume },
+        { symbol: 'meVolume',           type: 'volume', label: TextManager.meVolume },
+        { symbol: 'seVolume',           type: 'volume', label: TextManager.seVolume },
+    ];
 };
 
 Window_Options.prototype.drawItem = function(index) {
@@ -60,71 +94,87 @@ Window_Options.prototype.statusWidth = function() {
 };
 
 Window_Options.prototype.statusText = function(index) {
-    var symbol = this.commandSymbol(index);
-    var value = this.getConfigValue(symbol);
-    if (this.isVolumeSymbol(symbol)) {
-        return this.volumeStatusText(value);
-    } else {
-        return this.booleanStatusText(value);
+    var { type, value, list } = this.getOptionData(index);
+    switch (type) {
+        case 'list':
+            return list.find((item) => item.value === value).label;
+        case 'bool':
+            return value ? 'ON' : 'OFF';
+        case 'volume':
+            return value + '%';
+        default:
+            return value;
     }
 };
 
-Window_Options.prototype.isVolumeSymbol = function(symbol) {
-    return symbol.contains('Volume');
-};
-
-Window_Options.prototype.booleanStatusText = function(value) {
-    return value ? 'ON' : 'OFF';
-};
-
-Window_Options.prototype.volumeStatusText = function(value) {
-    return value + '%';
-};
-
-Window_Options.prototype.processOk = function() {
-    var index = this.index();
-    var symbol = this.commandSymbol(index);
-    var value = this.getConfigValue(symbol);
-    if (this.isVolumeSymbol(symbol)) {
-        value += this.volumeOffset();
-        if (value > 100) {
-            value = 0;
-        }
-        value = value.clamp(0, 100);
-        this.changeValue(symbol, value);
-    } else {
-        this.changeValue(symbol, !value);
+Window_Options.prototype.processOk = function () {
+    var { symbol, type, value, list } = this.getOptionData();
+    switch (type) {
+        case 'list':
+            const currentIndex = list.findIndex((item) => item.value === value);
+            const nextIndex = (currentIndex + 1).mod(list.length);
+            this.changeValue(symbol, list[nextIndex].value);
+            break;
+        case 'bool':
+            this.changeValue(symbol, !value);
+            break;
+        case 'volume':
+            value += this.volumeOffset();
+            if (value > 100) {
+                value = 0;
+            }
+            value = value.clamp(0, 100);
+            this.changeValue(symbol, value);
+            break;
+        default:
+            return value;
     }
 };
 
-Window_Options.prototype.cursorRight = function(wrap) {
-    var index = this.index();
-    var symbol = this.commandSymbol(index);
-    var value = this.getConfigValue(symbol);
-    if (this.isVolumeSymbol(symbol)) {
-        value += this.volumeOffset();
-        value = value.clamp(0, 100);
-        this.changeValue(symbol, value);
-    } else {
-        this.changeValue(symbol, true);
+Window_Options.prototype.cursorRight = function (wrap) {
+    var { symbol, type, value, list } = this.getOptionData();
+    switch (type) {
+        case 'list':
+            const currentIndex = list.findIndex((item) => item.value === value);
+            const nextIndex = (currentIndex + 1).mod(list.length);
+            this.changeValue(symbol, list[nextIndex].value);
+            break;
+        case 'bool':
+            this.changeValue(symbol, true);
+            break;
+        case 'volume':
+            value += this.volumeOffset();
+            value = value.clamp(0, 100);
+            this.changeValue(symbol, value);
+            break;
+        default:
+            return value;
     }
 };
 
-Window_Options.prototype.cursorLeft = function(wrap) {
-    var index = this.index();
-    var symbol = this.commandSymbol(index);
-    var value = this.getConfigValue(symbol);
-    if (this.isVolumeSymbol(symbol)) {
-        value -= this.volumeOffset();
-        value = value.clamp(0, 100);
-        this.changeValue(symbol, value);
-    } else {
-        this.changeValue(symbol, false);
+Window_Options.prototype.cursorLeft = function (wrap) {
+    var { symbol, type, value, list } = this.getOptionData();
+    switch (type) {
+        case 'list':
+            const currentIndex = list.findIndex((item) => item.value === value);
+            const nextIndex = (currentIndex - 1).mod(list.length);
+            this.changeValue(symbol, list[nextIndex].value);
+            break;
+        case 'bool':
+            this.changeValue(symbol, false);
+            break;
+        case 'volume':
+            value -= this.volumeOffset();
+            value = value.clamp(0, 100);
+            this.changeValue(symbol, value);
+            break;
+        default:
+            return value;
     }
 };
 
 Window_Options.prototype.volumeOffset = function() {
-    return 20;
+    return 5;
 };
 
 Window_Options.prototype.changeValue = function(symbol, value) {
@@ -136,10 +186,21 @@ Window_Options.prototype.changeValue = function(symbol, value) {
     }
 };
 
+Window_Options.prototype.getOptionData = function (index) {
+    if (index === undefined) index = this.index();
+
+    var ext = this.commandExt(index);
+    var value = this.getConfigValue(ext.symbol);
+    return {
+        ...ext,
+        value,
+    }
+};
+
 Window_Options.prototype.getConfigValue = function(symbol) {
     return ConfigManager[symbol];
 };
 
-Window_Options.prototype.setConfigValue = function(symbol, volume) {
-    ConfigManager[symbol] = volume;
+Window_Options.prototype.setConfigValue = function(symbol, value) {
+    ConfigManager[symbol] = value;
 };

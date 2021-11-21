@@ -78,7 +78,7 @@ Window_BattleLog.prototype.updateWait = function() {
 
 Window_BattleLog.prototype.updateWaitCount = function() {
     if (this._waitCount > 0) {
-        this._waitCount -= this.isFastForward() ? 3 : 1;
+        this._waitCount -= this.isFastForward() ? 2 + ConfigManager.fastforwardSpeed : 1;
         if (this._waitCount < 0) {
             this._waitCount = 0;
         }

@@ -255,6 +255,22 @@ Window_Selectable.prototype.cursorPageup = function() {
     }
 };
 
+Window_Selectable.prototype.cursorHome = function () {
+    var index = this.index();
+    var maxItems = this.maxItems();
+    if (index > 0) {
+        this.select(0);
+    }
+};
+
+Window_Selectable.prototype.cursorEnd = function () {
+    var index = this.index();
+    var maxItems = this.maxItems();
+    if (index < maxItems - 1) {
+        this.select(maxItems - 1);
+    }
+};
+
 Window_Selectable.prototype.scrollDown = function() {
     if (this.topRow() + 1 < this.maxRows()) {
         this.setTopRow(this.topRow() + 1);
@@ -305,6 +321,12 @@ Window_Selectable.prototype.processCursorMove = function() {
         if (!this.isHandled('pageup') && Input.isTriggered('pageup')) {
             this.cursorPageup();
         }
+        if (!this.isHandled('home') && Input.isTriggered('home')) {
+            this.cursorHome();
+        }
+        if (!this.isHandled('end') && Input.isTriggered('end')) {
+            this.cursorEnd();
+        }
         if (this.index() !== lastIndex) {
             SoundManager.playCursor();
         }
@@ -313,6 +335,16 @@ Window_Selectable.prototype.processCursorMove = function() {
 
 Window_Selectable.prototype.processHandling = function() {
     if (this.isOpenAndActive()) {
+
+        if (Input.isTriggered('copyitem')) {
+            const command = typeof this.commandName === 'function' && this.commandName(this.index());
+            const item = typeof this.item === 'function' && this.item();
+            const text = command || (item && item.name);
+            const clipboard = require('nw.gui').Clipboard.get();
+            clipboard.set(text || '', 'text');
+            SoundManager.playLoad();
+        }
+        
         if (this.isOkEnabled() && this.isOkTriggered()) {
             this.processOk();
         } else if (this.isCancelEnabled() && this.isCancelTriggered()) {
@@ -321,6 +353,10 @@ Window_Selectable.prototype.processHandling = function() {
             this.processPagedown();
         } else if (this.isHandled('pageup') && Input.isTriggered('pageup')) {
             this.processPageup();
+        } else if (this.isHandled('home') && Input.isTriggered('home')) {
+            this.processHome();
+        } else if (this.isHandled('end') && Input.isTriggered('end')) {
+            this.processEnd();
         }
     }
 };
@@ -484,6 +520,20 @@ Window_Selectable.prototype.processPagedown = function() {
     this.updateInputData();
     this.deactivate();
     this.callHandler('pagedown');
+};
+
+Window_Selectable.prototype.processHome = function () {
+    SoundManager.playCursor();
+    this.updateInputData();
+    this.deactivate();
+    this.callHandler('home');
+};
+
+Window_Selectable.prototype.processEnd = function () {
+    SoundManager.playCursor();
+    this.updateInputData();
+    this.deactivate();
+    this.callHandler('end');
 };
 
 Window_Selectable.prototype.updateInputData = function() {

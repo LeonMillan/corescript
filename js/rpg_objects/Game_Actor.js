@@ -470,6 +470,14 @@ Game_Actor.prototype.paramPlus = function(paramId) {
     return value;
 };
 
+Game_Actor.prototype.paramBuffRate = function (paramId) {
+    if (this._buffs[paramId] > 0) {
+        return this._buffs[paramId] * 0.4 + 1.0;
+    } else {
+        return this._buffs[paramId] * 0.2 + 1.1;
+    }
+};
+
 Game_Actor.prototype.attackAnimationId1 = function() {
     if (this.hasNoWeapons()) {
         return this.bareHandsAnimationId();
@@ -547,7 +555,7 @@ Game_Actor.prototype.finalExpRate = function() {
 };
 
 Game_Actor.prototype.benchMembersExpRate = function() {
-    return $dataSystem.optExtraExp ? 1 : 0;
+    return $dataSystem.optExtraExp ? 1 : 0.7;
 };
 
 Game_Actor.prototype.shouldDisplayLevelUp = function() {

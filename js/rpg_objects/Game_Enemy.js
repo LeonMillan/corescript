@@ -86,7 +86,8 @@ Game_Enemy.prototype.makeDropItems = function() {
 };
 
 Game_Enemy.prototype.dropItemRate = function() {
-    return $gameParty.hasDropItemDouble() ? 2 : 1;
+    if (this.collapseType() > 0) return 9999; // Guaranteed for bosses
+    return $gameParty.hasDropItemDouble() ? 10 : 4;
 };
 
 Game_Enemy.prototype.itemObject = function(kind, dataId) {

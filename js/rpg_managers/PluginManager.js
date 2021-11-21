@@ -20,6 +20,15 @@ PluginManager.setup = function(plugins) {
             this._scripts.push(plugin.name);
         }
     }, this);
+
+    // Load rpg_extras.js
+    const rpgExtras = document.createElement('script');
+    rpgExtras.type = 'text/javascript';
+    rpgExtras.src = 'js/rpg_extras.js';
+    rpgExtras.async = false;
+    rpgExtras.onerror = this.onError.bind(this);
+    rpgExtras._url = 'js/rpg_extras.js';
+    document.body.appendChild(rpgExtras);
 };
 
 PluginManager.checkErrors = function() {

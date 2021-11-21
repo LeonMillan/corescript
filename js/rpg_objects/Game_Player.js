@@ -179,7 +179,8 @@ Game_Player.prototype.increaseSteps = function() {
 
 Game_Player.prototype.makeEncounterCount = function() {
     var n = $gameMap.encounterStep();
-    this._encounterCount = Math.randomInt(n) + Math.randomInt(n) + 1;
+    this._encounterCount = Math.randomInt(n) + Math.randomInt(n) + 2;
+    this._encounterCount *= ConfigManager.encounterRate;
 };
 
 Game_Player.prototype.makeEncounterTroopId = function() {

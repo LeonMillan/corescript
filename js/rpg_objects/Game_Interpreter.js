@@ -162,7 +162,7 @@ Game_Interpreter.prototype.wait = function(duration) {
 };
 
 Game_Interpreter.prototype.fadeSpeed = function() {
-    return 24;
+    return ConfigManager.transitionTime;
 };
 
 Game_Interpreter.prototype.executeCommand = function() {
@@ -1798,12 +1798,12 @@ Game_Interpreter.prototype.pluginCommand = function(command, args) {
     // to be overridden by plugins
 };
 
-Game_Interpreter.requestImagesByPluginCommand = function(command,args){
+Game_Interpreter.requestImagesByPluginCommand = function(command, args) {
 };
 
-Game_Interpreter.requestImagesForCommand = function(command){
+Game_Interpreter.requestImagesForCommand = function(command) {
     var params = command.parameters;
-    switch(command.code){
+    switch (command.code) {
         // Show Text
         case 101:
             ImageManager.requestFace(params[0]);
@@ -1820,10 +1820,10 @@ Game_Interpreter.requestImagesForCommand = function(command){
 
         // Set Movement Route
         case 205:
-            if(params[1]){
-                params[1].list.forEach(function(command){
+            if (params[1]) {
+                params[1].list.forEach(function(command) {
                     var params = command.parameters;
-                    if(command.code === Game_Character.ROUTE_CHANGE_IMAGE){
+                    if (command.code === Game_Character.ROUTE_CHANGE_IMAGE) {
                         ImageManager.requestCharacter(params[0]);
                     }
                 });
@@ -1832,7 +1832,7 @@ Game_Interpreter.requestImagesForCommand = function(command){
 
         // Show Animation, Show Battle Animation
         case 212: case 337:
-            if(params[1]) {
+            if (params[1]) {
                 var animation = $dataAnimations[params[1]];
                 var name1 = animation.animation1Name;
                 var name2 = animation.animation2Name;
@@ -1861,7 +1861,7 @@ Game_Interpreter.requestImagesForCommand = function(command){
         // Change Tileset
         case 282:
             var tileset = $dataTilesets[params[0]];
-            tileset.tilesetNames.forEach(function(tilesetName){
+            tileset.tilesetNames.forEach(function(tilesetName) {
                 ImageManager.requestTileset(tilesetName);
             });
             break;
@@ -1891,7 +1891,7 @@ Game_Interpreter.requestImagesForCommand = function(command){
         // Change Vehicle Image
         case 323:
             var vehicle = $gameMap.vehicle(params[0]);
-            if(vehicle){
+            if (vehicle) {
                 ImageManager.requestCharacter(params[1]);
             }
             break;
@@ -1911,14 +1911,14 @@ Game_Interpreter.requestImagesForCommand = function(command){
         case 356:
             var args = params[0].split(" ");
             var commandName = args.shift();
-            Game_Interpreter.requestImagesByPluginCommand(commandName,args);
+            Game_Interpreter.requestImagesByPluginCommand(commandName, args);
         break;
             
     }
 };
 
-Game_Interpreter.requestImagesByChildEvent = function(command,commonList){
-    var params =command.parameters;
+Game_Interpreter.requestImagesByChildEvent = function(command, commonList) {
+    var params = command.parameters;
     var commonEvent = $dataCommonEvents[params[0]];
     if (commonEvent) {
         if (!commonList) {
@@ -1931,15 +1931,16 @@ Game_Interpreter.requestImagesByChildEvent = function(command,commonList){
     }
 };
 
-Game_Interpreter.requestImages = function(list, commonList){
-    if(!list){return;}
+Game_Interpreter.requestImages = function(list, commonList) {
+    if (!list) { return; }
+
     var len = list.length;
-    for(var i=0; i<len; i+=1 ){
+    for (var i = 0; i < len; i += 1) {
         var command = list[i];
         // Common Event
-        if(command.code ===117){
-            Game_Interpreter.requestImagesByChildEvent(command,commonList);
-        }else{
+        if (command.code === 117) {
+            Game_Interpreter.requestImagesByChildEvent(command, commonList);
+        } else {
             Game_Interpreter.requestImagesForCommand(command);            
         }
     }

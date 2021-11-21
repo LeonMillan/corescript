@@ -78,7 +78,7 @@ Window_ScrollText.prototype.isFastForward = function() {
 };
 
 Window_ScrollText.prototype.fastForwardRate = function() {
-    return 3;
+    return 2 + ConfigManager.fastforwardSpeed;
 };
 
 Window_ScrollText.prototype.terminateMessage = function() {

@@ -10,6 +10,9 @@ function Game_Message() {
 
 Game_Message.prototype.initialize = function() {
     this.clear();
+
+    this._onKeyDown = this._onKeyDown.bind(this);
+    document.addEventListener('keydown', this._onKeyDown);
 };
 
 Game_Message.prototype.clear = function() {
@@ -184,4 +187,16 @@ Game_Message.prototype.newPage = function() {
 
 Game_Message.prototype.allText = function() {
     return this._texts.join('\n');
+};
+
+Game_Message.prototype._onKeyDown = function(evt) {
+    if (evt.keyCode === 190 && this.isBusy()) { // . key
+        const clipboard = require('nw.gui').Clipboard.get();
+        
+        let copyText = this.allText();
+        if (this.isChoice()) copyText += '\n\n' + this._choices.join('\n');
+
+        clipboard.set(copyText, 'text');
+        SoundManager.playLoad();
+    }
 };

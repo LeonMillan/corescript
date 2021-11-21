@@ -59,6 +59,10 @@ Game_CharacterBase.prototype.posNt = function(x, y) {
     return this.pos(x, y) && !this.isThrough();
 };
 
+Game_CharacterBase.prototype.distanceTo = function (x, y) {
+    return Math.hypot(this._x - x, this._y - y);
+};
+
 Game_CharacterBase.prototype.moveSpeed = function() {
     return this._moveSpeed;
 };
@@ -125,7 +129,7 @@ Game_CharacterBase.prototype.resetStopCount = function() {
 };
 
 Game_CharacterBase.prototype.realMoveSpeed = function() {
-    return this._moveSpeed + (this.isDashing() ? 1 : 0);
+    return this._moveSpeed + (this.isDashing() ? ConfigManager.dashSpeed : 0);
 };
 
 Game_CharacterBase.prototype.distancePerFrame = function() {

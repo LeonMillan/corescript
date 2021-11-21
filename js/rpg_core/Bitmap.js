@@ -447,6 +447,13 @@ Bitmap.prototype.resize = function(width, height) {
  * @param {Number} [dh=sh] The height to draw the image in the destination
  */
 Bitmap.prototype.blt = function(source, sx, sy, sw, sh, dx, dy, dw, dh) {
+    if (!source.isReady()) {
+        console.log('! source bitmap was not ready');
+        source.addLoadListener(() => {
+            this.blt(source, sx, sy, sw, sh, dx, dy, dw, dh);
+        });
+        return;
+    }
     dw = dw || sw;
     dh = dh || sh;
     if (sx >= 0 && sy >= 0 && sw > 0 && sh > 0 && dw > 0 && dh > 0 &&
@@ -472,6 +479,13 @@ Bitmap.prototype.blt = function(source, sx, sy, sw, sh, dx, dy, dw, dh) {
  * @param {Number} [dh=sh] The height to draw the image in the destination
  */
 Bitmap.prototype.bltImage = function(source, sx, sy, sw, sh, dx, dy, dw, dh) {
+    if (!source.isReady()) {
+        console.log('! source bitmap was not ready');
+        source.addLoadListener(() => {
+            this.bltImage(source, sx, sy, sw, sh, dx, dy, dw, dh);
+        });
+        return;
+    }
     dw = dw || sw;
     dh = dh || sh;
     if (sx >= 0 && sy >= 0 && sw > 0 && sh > 0 && dw > 0 && dh > 0 &&
@@ -844,13 +858,13 @@ Bitmap.prototype.blur = function() {
  * Add a callback function that will be called when the bitmap is loaded.
  *
  * @method addLoadListener
- * @param {Function} listner The callback function
+ * @param {Function} listener The callback function
  */
-Bitmap.prototype.addLoadListener = function(listner) {
+Bitmap.prototype.addLoadListener = function(listener) {
     if (!this.isReady()) {
-        this._loadListeners.push(listner);
+        this._loadListeners.push(listener);
     } else {
-        listner(this);
+        listener(this);
     }
 };
 
@@ -989,10 +1003,11 @@ Bitmap.prototype._setDirty = function() {
 Bitmap.prototype.checkDirty = function() {
     if (this._dirty) {
         this._baseTexture.update();
-        var baseTexture = this._baseTexture;
-        setTimeout(function() {
-            baseTexture.update();
-        }, 0);
+        // Optimization (?)
+        // var baseTexture = this._baseTexture;
+        // setTimeout(function() {
+        //     baseTexture.update();
+        // }, 0);
         this._dirty = false;
     }
 };

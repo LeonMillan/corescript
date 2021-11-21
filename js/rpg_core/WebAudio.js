@@ -412,8 +412,8 @@ WebAudio.prototype.stop = function() {
     this._removeNodes();
     if (this._stopListeners) {
         while (this._stopListeners.length > 0) {
-            var listner = this._stopListeners.shift();
-            listner();
+            var listener = this._stopListeners.shift();
+            listener();
         }
     }
 };
@@ -478,20 +478,20 @@ WebAudio.prototype.seek = function() {
  * Add a callback function that will be called when the audio data is loaded.
  *
  * @method addLoadListener
- * @param {Function} listner The callback function
+ * @param {Function} listener The callback function
  */
-WebAudio.prototype.addLoadListener = function(listner) {
-    this._loadListeners.push(listner);
+WebAudio.prototype.addLoadListener = function(listener) {
+    this._loadListeners.push(listener);
 };
 
 /**
  * Add a callback function that will be called when the playback is stopped.
  *
  * @method addStopListener
- * @param {Function} listner The callback function
+ * @param {Function} listener The callback function
  */
-WebAudio.prototype.addStopListener = function(listner) {
-    this._stopListeners.push(listner);
+WebAudio.prototype.addStopListener = function(listener) {
+    this._stopListeners.push(listener);
 };
 
 /**
@@ -644,8 +644,8 @@ WebAudio.prototype._updatePanner = function() {
  */
 WebAudio.prototype._onLoad = function() {
     while (this._loadListeners.length > 0) {
-        var listner = this._loadListeners.shift();
-        listner();
+        var listener = this._loadListeners.shift();
+        listener();
     }
 };
 

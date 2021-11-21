@@ -102,6 +102,7 @@ Window_Message.prototype.startMessage = function() {
     this._textState = {};
     this._textState.index = 0;
     this._textState.text = this.convertEscapeCharacters($gameMessage.allText());
+    this._textState.buffer = '';
     this.newPage(this._textState);
     this.updatePlacement();
     this.updateBackground();
@@ -185,13 +186,16 @@ Window_Message.prototype.updateMessage = function() {
             this._textSpeedCount = 0;
             this.processCharacter(this._textState);
             if (!this._showFast && !this._lineShowFast && this._textSpeed !== -1) {
+                this.processBuffer(this._textState);
                 break;
             }
             if (this.pause || this._waitCount > 0) {
+                this.processBuffer(this._textState);
                 break;
             }
         }
         if (this.isEndOfText(this._textState)) {
+            this.processBuffer(this._textState);
             this.onEndOfText();
         }
         return true;
