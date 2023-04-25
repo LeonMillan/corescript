@@ -147,3 +147,17 @@ String.prototype.contains = function(string) {
 Math.randomInt = function(max) {
     return Math.floor(max * Math.random());
 };
+
+/**
+ * Helper function to redefine a method from an existing class or singleton.
+ *
+ * @param {Object} obj object that contains the method to be redefined
+ * @param {keyof obj} methodName one of the methods from obj
+ * @param {Function} func new implementation which also receives the original method
+ */
+function redefine(obj, methodName, func) {
+    const method = obj[methodName];
+    obj[methodName] = function(...args) {
+        return func.call(this, method.bind(this), ...args);
+    };
+}
