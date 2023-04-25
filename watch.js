@@ -1,16 +1,26 @@
-const {readFileSync} = require('fs');
+const cpx = require("cpx");
+const fs = require("fs");
+const watch = require("node-watch");
+const concatSource = require("./concat.js");
 
-const {copySync} = require('cpx');
-const watch = require('node-watch');
+const root = "../www";
 
-const concatSource = require('./concat.js');
+const bundles = fs.readdirSync("./build_bundles");
 
-JSON.parse(readFileSync('./modules.json').toString())
-    .map(name=>({name, target:`./js/${name}`}))
-    .forEach(({name,target})=>{
-        watch(target, ()=>{
-            concatSource(name);
-            copySync(`./dist/${name}.js`, './game/js/');
-            console.log(`${target} changed. copy ${name}.js`);
-        });
-    });
+bundles.forEach((bundle) => {
+  const bundleName = bundle.replace(".json", "");
+  watch(`./js/${bundleName}/`, { recursive: true }, function (name) {
+    console.log(`${name} changed, rebuilding ${bundleName}...`);
+    concatSource(bundleName);
+  });
+});
+
+watch(`./template`, { recursive: true }, function (name) {
+  console.log(`${name} changed, updating...`);
+  cpx.copySync("./template/**/*", root, { update: true });
+});
+
+watch(`./plugins`, { recursive: true }, function (name) {
+  console.log(`${name} changed, updating...`);
+  cpx.copySync("./plugins/*", root + "/js/plugins", { update: true });
+});
