@@ -161,6 +161,7 @@ Graphics.tickEnd = function() {
  * @param {Stage} stage The stage object to be rendered
  */
 Graphics.render = function(stage) {
+    window.__PIXI_STAGE__ = stage;
     if (this._skipCount <= 0) {
         var startTime = Date.now();
         if (stage) {
@@ -1118,6 +1119,7 @@ Graphics._createRenderer = function() {
             this._renderer = PIXI.autoDetectRenderer(width, height, options);
             break;
         }
+        window.__PIXI_RENDERER__ = this._renderer;
 
         if(this._renderer && this._renderer.textureGC)
             this._renderer.textureGC.maxIdle = 1;
