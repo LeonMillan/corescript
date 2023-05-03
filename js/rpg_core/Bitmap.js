@@ -458,6 +458,37 @@ Bitmap.prototype.blt = function(source, sx, sy, sw, sh, dx, dy, dw, dh) {
 };
 
 /**
+ * Draw a nine-patch image.
+ *
+ * @method blt
+ * @param {Bitmap} source The bitmap to draw
+ * @param {Number} sx The x coordinate in the source
+ * @param {Number} sy The y coordinate in the source
+ * @param {Number} cz The corner size in the source image
+ * @param {Number} ez The edge size in the source image
+ * @param {Number} dx The x coordinate in the destination
+ * @param {Number} dy The y coordinate in the destination
+ * @param {Number} [dw] The width to draw the image in the destination
+ * @param {Number} [dh] The height to draw the image in the destination
+ */
+Bitmap.prototype.drawNinePatch = function(source, sx, sy, cz, ez, dx, dy, dw, dh, withCenter = false) {
+    const img = source._canvas;
+    this._context.globalCompositeOperation = "source-over";
+    if (withCenter) {
+        this._context.drawImage(img,  sx+cz,  sy+cz,  ez, ez,    dx+cz,  dy+cz,    dw-cz*2,  dh-cz*2);  // 5
+    }
+    this._context.drawImage(img,    sx+cz,    sy,         ez,     cz,    dx+cz,    dy,       dw-cz*2, cz);      // 8
+    this._context.drawImage(img,    sx+cz,    sy+cz+ez,   ez,     cz,    dx+cz,    dy+dh-cz, dw-cz*2, cz);      // 2
+    this._context.drawImage(img,    sx,       sy+cz,      cz,     ez,    dx,       dy+cz,    cz,      dh-cz*2); // 4
+    this._context.drawImage(img,    sx+cz+ez, sy+cz,      cz,     ez,    dx+dw-cz, dy+cz,    cz,      dh-cz*2); // 6
+    this._context.drawImage(img,    sx,       sy,         cz,     cz,    dx,       dy,       cz,      cz);      // 7
+    this._context.drawImage(img,    sx+cz+ez, sy,         cz,     cz,    dx+dw-cz, dy,       cz,      cz);      // 9
+    this._context.drawImage(img,    sx,       sy+cz+ez,   cz,     cz,    dx,       dy+dh-cz, cz,      cz);      // 1
+    this._context.drawImage(img,    sx+cz+ez, sy+cz+ez,   cz,     cz,    dx+dw-cz, dy+dh-cz, cz,      cz);      // 3
+    this._setDirty();
+};
+
+/**
  * Performs a block transfer, using assumption that original image was not modified (no hue)
  *
  * @method blt

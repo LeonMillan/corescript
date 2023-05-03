@@ -12,6 +12,8 @@ Sprite_Animation.prototype.constructor = Sprite_Animation;
 
 Sprite_Animation._checker1 = {};
 Sprite_Animation._checker2 = {};
+Sprite_Animation.frameWidth = 192;
+Sprite_Animation.frameHeight = 192;
 
 Sprite_Animation.prototype.initialize = function() {
     Sprite.prototype.initialize.call(this);
@@ -243,11 +245,16 @@ Sprite_Animation.prototype.updateAllCellSprites = function(frame) {
 Sprite_Animation.prototype.updateCellSprite = function(sprite, cell) {
     var pattern = cell[0];
     if (pattern >= 0) {
-        var sx = pattern % 5 * 192;
-        var sy = Math.floor(pattern % 100 / 5) * 192;
+        var sx = (pattern % 5) * Sprite_Animation.frameWidth;
+        var sy = Math.floor((pattern % 100) / 5) * Sprite_Animation.frameHeight;
         var mirror = this._mirror;
         sprite.bitmap = pattern < 100 ? this._bitmap1 : this._bitmap2;
-        sprite.setFrame(sx, sy, 192, 192);
+        sprite.setFrame(
+          sx,
+          sy,
+          Sprite_Animation.frameWidth,
+          Sprite_Animation.frameHeight,
+        );
         sprite.x = cell[1];
         sprite.y = cell[2];
         sprite.rotation = cell[4] * Math.PI / 180;

@@ -167,9 +167,7 @@ Window_Base.prototype.deactivate = function() {
 };
 
 Window_Base.prototype.textColor = function(n) {
-    var px = 96 + (n % 8) * 12 + 6;
-    var py = 144 + Math.floor(n / 8) * 12 + 6;
-    return this.windowskin.getPixel(px, py);
+    return this.getPaletteColor(n);
 };
 
 Window_Base.prototype.normalColor = function() {
@@ -233,7 +231,9 @@ Window_Base.prototype.tpCostColor = function() {
 };
 
 Window_Base.prototype.pendingColor = function() {
-    return this.windowskin.getPixel(120, 120);
+    const { x, y } = Window.cursorPoint();
+    const s = Window.cursorSize;
+    return this.windowskin.getPixel(x+s/2, y+s/2);
 };
 
 Window_Base.prototype.translucentOpacity = function() {

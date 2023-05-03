@@ -12,6 +12,46 @@ function Window() {
 Window.prototype = Object.create(PIXI.Container.prototype);
 Window.prototype.constructor = Window;
 
+Window.cellSize             = 96;
+Window.cursorSize           = 48;
+Window.cursorBorderSize     = 4;
+Window.pauseSize            = 24;
+Window.pauseRows            = 2;
+Window.pauseColumns         = 2;
+Window.borderSegmentSize    = 24;
+Window.arrowWidth           = 24;
+Window.arrowLength          = 12;
+Window.paletteSampleSize    = 12;
+Window.paletteColumns       = 8;
+
+Window.prototype.stretchBackPoint = function() {
+    return new Point(0, 0);
+};
+
+Window.prototype.tiledBackPoint = function() {
+    return this.stretchBackPoint().add(0, Window.cellSize);
+};
+
+Window.prototype.borderPoint = function() {
+    return this.stretchBackPoint().add(Window.cellSize, 0);
+};
+
+Window.prototype.arrowsPoint = function() {
+    return this.borderPoint().add(24, 24);
+};
+
+Window.prototype.cursorPoint = function() {
+    return this.stretchBackPoint().add(Window.cellSize, Window.cellSize);
+};
+
+Window.prototype.pausePoint = function() {
+    return this.cursorPoint().add(Window.cursorSize, 0);
+};
+
+Window.prototype.palettePoint = function() {
+    return this.cursorPoint().add(0, Window.cursorSize);
+};
+
 Window.prototype.initialize = function() {
     PIXI.Container.call(this);
 
@@ -285,6 +325,20 @@ Window.prototype.move = function(x, y, width, height) {
 };
 
 /**
+ * Returns a color from the windowskin palette.
+ *
+ * @method isOpen
+ */
+Window.prototype.getPaletteColor = function(n) {
+    const { x: sx, y: sy } = this.palettePoint();
+    const s = Window.paletteSampleSize;
+    const c = Window.paletteColumns;
+    var px = sx + (n % c) * s + s / 2;
+    var py = sy + Math.floor(n / c) * s + s / 2;
+    return this.windowskin.getPixel(px, py);
+};
+
+/**
  * Returns true if the window is completely open (openness == 255).
  *
  * @method isOpen
@@ -427,11 +481,13 @@ Window.prototype._refreshBack = function() {
     this._windowBackSprite.move(m, m);
 
     if (w > 0 && h > 0 && this._windowskin) {
-        var p = 96;
-        bitmap.blt(this._windowskin, 0, 0, p, p, 0, 0, w, h);
+        const { x: sx, y: sy } = this.stretchBackPoint();
+        const { x: tx, y: ty } = this.tiledBackPoint();
+        const p = Window.cellSize;
+        bitmap.blt(this._windowskin, sx, sy, p, p, 0, 0, w, h);
         for (var y = 0; y < h; y += p) {
             for (var x = 0; x < w; x += p) {
-                bitmap.blt(this._windowskin, 0, p, p, p, x, y, p, p);
+                bitmap.blt(this._windowskin, tx, ty, p, p, x, y, p, p);
             }
         }
         var tone = this._colorTone;
@@ -446,24 +502,16 @@ Window.prototype._refreshBack = function() {
 Window.prototype._refreshFrame = function() {
     var w = this._width;
     var h = this._height;
-    var m = 24;
+    var m = Window.borderSegmentSize;
     var bitmap = new Bitmap(w, h);
 
     this._windowFrameSprite.bitmap = bitmap;
     this._windowFrameSprite.setFrame(0, 0, w, h);
 
     if (w > 0 && h > 0 && this._windowskin) {
-        var skin = this._windowskin;
-        var p = 96;
-        var q = 96;
-        bitmap.blt(skin, p+m, 0+0, p-m*2, m, m, 0, w-m*2, m);
-        bitmap.blt(skin, p+m, 0+q-m, p-m*2, m, m, h-m, w-m*2, m);
-        bitmap.blt(skin, p+0, 0+m, m, p-m*2, 0, m, m, h-m*2);
-        bitmap.blt(skin, p+q-m, 0+m, m, p-m*2, w-m, m, m, h-m*2);
-        bitmap.blt(skin, p+0, 0+0, m, m, 0, 0, m, m);
-        bitmap.blt(skin, p+q-m, 0+0, m, m, w-m, 0, m, m);
-        bitmap.blt(skin, p+0, 0+q-m, m, m, 0, h-m, m, m);
-        bitmap.blt(skin, p+q-m, 0+q-m, m, m, w-m, h-m, m, m);
+        const { x: sx, y: sy } = this.borderPoint();
+        const skin = this._windowskin;
+        bitmap.drawNinePatch(skin, /*src*/ sx, sy, m, m * 2, /*dest*/ 0, 0, w, h);
     }
 };
 
@@ -477,7 +525,6 @@ Window.prototype._refreshCursor = function() {
     var y = this._cursorRect.y + pad - this.origin.y;
     var w = this._cursorRect.width;
     var h = this._cursorRect.height;
-    var m = 4;
     var x2 = Math.max(x, pad);
     var y2 = Math.max(y, pad);
     var ox = x - x2;
@@ -491,18 +538,11 @@ Window.prototype._refreshCursor = function() {
     this._windowCursorSprite.move(x2, y2);
 
     if (w > 0 && h > 0 && this._windowskin) {
-        var skin = this._windowskin;
-        var p = 96;
-        var q = 48;
-        bitmap.blt(skin, p+m, p+m, q-m*2, q-m*2, ox+m, oy+m, w-m*2, h-m*2);
-        bitmap.blt(skin, p+m, p+0, q-m*2, m, ox+m, oy+0, w-m*2, m);
-        bitmap.blt(skin, p+m, p+q-m, q-m*2, m, ox+m, oy+h-m, w-m*2, m);
-        bitmap.blt(skin, p+0, p+m, m, q-m*2, ox+0, oy+m, m, h-m*2);
-        bitmap.blt(skin, p+q-m, p+m, m, q-m*2, ox+w-m, oy+m, m, h-m*2);
-        bitmap.blt(skin, p+0, p+0, m, m, ox+0, oy+0, m, m);
-        bitmap.blt(skin, p+q-m, p+0, m, m, ox+w-m, oy+0, m, m);
-        bitmap.blt(skin, p+0, p+q-m, m, m, ox+0, oy+h-m, m, m);
-        bitmap.blt(skin, p+q-m, p+q-m, m, m, ox+w-m, oy+h-m, m, m);
+        const { x: sx, y: sy } = this.cursorPoint();
+        const skin = this._windowskin;
+        const m = Window.cursorBorderSize;
+        const q = Window.cursorSize;
+        bitmap.drawNinePatch(skin, /*src*/ sx, sy, m, q-m*2, /*dest*/ ox, oy, w2, h2, true);
     }
 };
 
@@ -519,12 +559,11 @@ Window.prototype._refreshContents = function() {
  * @private
  */
 Window.prototype._refreshArrows = function() {
-    var w = this._width;
-    var h = this._height;
-    var p = 24;
-    var q = p/2;
-    var sx = 96+p;
-    var sy = 0+p;
+    const w = this._width;
+    const h = this._height;
+    const p = Window.arrowWidth;
+    const q = Window.arrowLength;
+    const { x: sx, y: sy } = this.arrowsPoint();
     this._downArrowSprite.bitmap = this._windowskin;
     this._downArrowSprite.anchor.x = 0.5;
     this._downArrowSprite.anchor.y = 0.5;
@@ -542,9 +581,8 @@ Window.prototype._refreshArrows = function() {
  * @private
  */
 Window.prototype._refreshPauseSign = function() {
-    var sx = 144;
-    var sy = 96;
-    var p = 24;
+    const p = Window.pauseSize;
+    const { x: sx, y: sy } = this.pausePoint();
     this._windowPauseSignSprite.bitmap = this._windowskin;
     this._windowPauseSignSprite.anchor.x = 0.5;
     this._windowPauseSignSprite.anchor.y = 1;
@@ -600,12 +638,13 @@ Window.prototype._updateArrows = function() {
  * @private
  */
 Window.prototype._updatePauseSign = function() {
-    var sprite = this._windowPauseSignSprite;
-    var x = Math.floor(this._animationCount / 16) % 2;
-    var y = Math.floor(this._animationCount / 16 / 2) % 2;
-    var sx = 144;
-    var sy = 96;
-    var p = 24;
+    const sprite = this._windowPauseSignSprite;
+    const w = Window.pauseColumns;
+    const h = Window.pauseRows;
+    const x = Math.floor(this._animationCount / 16) % w;
+    const y = Math.floor(this._animationCount / 16 / w) % h;
+    const p = Window.pauseSize;
+    const { x: sx, y: sy } = this.pausePoint();
     if (!this.pause) {
         sprite.alpha = 0;
     } else if (sprite.alpha < 1) {

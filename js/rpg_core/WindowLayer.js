@@ -12,6 +12,8 @@ function WindowLayer() {
 WindowLayer.prototype = Object.create(PIXI.Container.prototype);
 WindowLayer.prototype.constructor = WindowLayer;
 
+WindowLayer.enableScissorMask = false;
+
 WindowLayer.prototype.initialize = function() {
     PIXI.Container.call(this);
     this._width = 0;
@@ -132,7 +134,9 @@ WindowLayer.prototype.renderCanvas = function(renderer) {
     for (var i = 0; i < this.children.length; i++) {
         var child = this.children[i];
         if (child._isWindow && child.visible && child.openness > 0) {
-            this._canvasClearWindowRect(renderer, child);
+            if (WindowLayer.enableScissorMask) {
+                this._canvasClearWindowRect(renderer, child);
+            }
             context.save();
             child.renderCanvas(renderer);
             context.restore();
@@ -196,10 +200,12 @@ WindowLayer.prototype.renderWebGL = function(renderer) {
     for (var i = 0; i < this.children.length; i++) {
         var child = this.children[i];
         if (child._isWindow && child.visible && child.openness > 0) {
-            this._maskWindow(child, shift);
-            renderer.maskManager.pushScissorMask(this, this._windowMask);
-            renderer.clear();
-            renderer.maskManager.popScissorMask();
+            if (WindowLayer.enableScissorMask) {
+                this._maskWindow(child, shift);
+                renderer.maskManager.pushScissorMask(this, this._windowMask);
+                renderer.clear();
+                renderer.maskManager.popScissorMask();
+            }
             renderer.currentRenderer.start();
             child.renderWebGL(renderer);
             renderer.currentRenderer.flush();
@@ -208,7 +214,9 @@ WindowLayer.prototype.renderWebGL = function(renderer) {
 
     renderer.flush();
     renderer.filterManager.popFilter();
-    renderer.maskManager.popScissorMask();
+    if (WindowLayer.enableScissorMask) {
+        renderer.maskManager.popScissorMask();
+    }
 
     for (var j = 0; j < this.children.length; j++) {
         if (!this.children[j]._isWindow) {

@@ -18,6 +18,17 @@ Point.prototype.initialize = function(x, y) {
     PIXI.Point.call(this, x, y);
 };
 
+Point.prototype.add = function(...args) {
+    if (args.length === 1) {
+        const [otherPoint] = args;
+        return new Point(this.x + otherPoint.x, this.y + otherPoint.y);
+    } else if (args.length === 2) {
+        const [x, y] = args;
+        return new Point(this.x + x, this.y + y);
+    }
+    throw new Error("Unsupported arguments: " + String(args));
+};
+
 /**
  * The x coordinate.
  *
