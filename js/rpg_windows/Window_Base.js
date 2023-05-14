@@ -32,6 +32,10 @@ Window_Base.prototype.lineHeight = function() {
     return 36;
 };
 
+Window_Base.prototype.iconAdjustY = function() {
+    return (this.lineHeight() - Window_Base._iconHeight) / 2;
+};
+
 Window_Base.prototype.standardFontFace = function() {
     if ($gameSystem.isChinese()) {
         return 'SimHei, Heiti TC, sans-serif';
@@ -375,7 +379,7 @@ Window_Base.prototype.processEscapeCharacter = function(code, textState) {
 };
 
 Window_Base.prototype.processDrawIcon = function(iconIndex, textState) {
-    this.drawIcon(iconIndex, textState.x + 2, textState.y + 2);
+    this.drawIcon(iconIndex, textState.x + 2, textState.y + this.iconAdjustY());
     textState.x += Window_Base._iconWidth + 4;
 };
 
@@ -520,7 +524,7 @@ Window_Base.prototype.drawActorIcons = function(actor, x, y, width) {
     width = width || 144;
     var icons = actor.allIcons().slice(0, Math.floor(width / Window_Base._iconWidth));
     for (var i = 0; i < icons.length; i++) {
-        this.drawIcon(icons[i], x + Window_Base._iconWidth * i, y + 2);
+        this.drawIcon(icons[i], x + Window_Base._iconWidth * i, y + this.iconAdjustY());
     }
 };
 
@@ -594,7 +598,7 @@ Window_Base.prototype.drawItemName = function(item, x, y, width) {
     if (item) {
         var iconBoxWidth = Window_Base._iconWidth + 4;
         this.resetTextColor();
-        this.drawIcon(item.iconIndex, x + 2, y + 2);
+        this.drawIcon(item.iconIndex, x + 2, y + this.iconAdjustY());
         this.drawText(item.name, x + iconBoxWidth, y, width - iconBoxWidth);
     }
 };

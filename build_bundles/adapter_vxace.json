@@ -1,0 +1,8 @@
+[
+  "js/adapter_vxace/vxace_core.js",
+  "js/adapter_vxace/vxace_vocab.js",
+  "js/adapter_vxace/vxace_window.js",
+  "js/adapter_vxace/vxace_managers.js",
+  "js/adapter_vxace/vxace_objects.js",
+  "js/adapter_vxace/vxace_scenes.js"
+]

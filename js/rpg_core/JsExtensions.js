@@ -133,7 +133,7 @@ Object.defineProperties(Array.prototype, {
   rotate: {
     enumerable: false,
     value: function () {
-      if (!Array.isArray(this[0])) throw new TypeError("Array is not 2D");
+      if (!Array.isArray(this[0])) return [...this];
       const xsize = this.length;
       const ysize = this[0].length;
       let result = new Array(ysize);
