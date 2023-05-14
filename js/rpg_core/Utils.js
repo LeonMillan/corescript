@@ -164,3 +164,32 @@ Utils.isSupportPassiveEvent = function() {
     Utils._supportPassiveEvent = passive;
     return passive;
 }
+
+Utils.DEFAULT_GRAPH_OPTIONS = {
+    rotate: 0,
+    midColor: "rgba(0,0,0,0)",
+    midOffset: 0.0,
+    outColor: "rgba(255,255,255,0.5)",
+    outOffset: 1.0,
+    edgeColor: "rgba(255,255,255,1)",
+    edgeWidth: 1.6,
+    axisColor: "rgba(127,127,127,0.7)",
+    axisWidth: 1.0,
+};
+
+Utils.makeGraphPositions = function(x, y, graphOptions, rateOverride = -1) {
+    const {
+        rotate,
+        radius,
+        items,
+    } = { ...Utils.DEFAULT_GRAPH_OPTIONS, ...graphOptions };
+    const angleStep = (Math.PI * 2) / items.length;
+
+    return items.map((item, idx) => {
+        const drawRadius = rateOverride === -1 ? (radius * item.rate) : (radius + rateOverride);
+        return [
+            x + Math.cos(rotate + angleStep * idx) * drawRadius,
+            y + Math.sin(rotate + angleStep * idx) * drawRadius,
+        ];
+    });
+};
